@@ -2,7 +2,9 @@ import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen'
+import HomeScreen2 from './screens/HomeScreen2'
 import ProductScreen from './screens/ProductScreen'
+import ProductScreen2 from './screens/ProductScreen2'
 import AdminProductList from './screens/AdminProductList'
 import ProductListScreen from './screens/ProductListScreen'
 import AddProductScreen from './screens/AddProductScreen'
@@ -10,6 +12,7 @@ import EditProductScreen from './screens/EditProductScreen'
 import AdminDashboard from './screens/AdminDashboard'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
+import ProfileScreen from './screens/ProfileScreen'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -21,10 +24,11 @@ function App() {
      <main className="py-3">
        <Container>
       <Routes>
-      <Route path="/" element={<HomeScreen />} />
+      <Route path="/" element={<HomeScreen2 />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
-      <Route path="/product/:id" element={<ProductScreen />} />
+      <Route path="/profile" element={<ProfileScreen />} />
+      <Route path="/product/:id" element={<ProductScreen2 />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/products" element={<ProductListScreen />} />
       <Route path="/admin/products/add" element={<AddProductScreen />} />

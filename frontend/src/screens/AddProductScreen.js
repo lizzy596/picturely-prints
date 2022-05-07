@@ -96,7 +96,7 @@ const submitHandler = async event => {
     formData.append("description", description)
   
   
-  const response = await fetch('http://localhost:3001/admin/products/add',{method: 'POST',body: formData})
+  const response = await fetch('http://localhost:3001/products/add',{method: 'POST',body: formData})
 
   const data = await response.json()
   dispatch({type: JUST_ADDED_PRODUCT })

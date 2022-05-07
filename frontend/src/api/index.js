@@ -16,8 +16,9 @@ API.interceptors.request.use((req) => {
 
 
 //export const add_Product = ({formData}) => API.post('/admin', {formData}); 
-export const getProducts = () => API.get('/admin/products')
-export const deleteProduct = (id) => API.delete(`/admin/products/${id}`);
+export const getProducts = () => API.get('/products')
+export const getProduct = (id) => API.get(`/products/${id}`)
+export const deleteProduct = (id) => API.delete(`/products/${id}`);
 
 
 

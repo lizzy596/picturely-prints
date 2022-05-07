@@ -42,6 +42,7 @@ const RegisterScreen = ({ location, history }) => {
      dispatch({type:'END_ERROR'})
       dispatch(register(form, navigate))
       
+      
     
   } 
 

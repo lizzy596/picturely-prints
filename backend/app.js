@@ -36,7 +36,7 @@ app.use(cors());
 
 
 app.use('/auth', authRoutes)
-app.use('/admin', productRoutes)
+app.use('/products', productRoutes)
 
 
 

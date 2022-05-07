@@ -26,6 +26,10 @@ const AdminProductList = () => {
 
         }
 
+        else {
+            dispatch(getProducts())
+        }
+
         
 
       

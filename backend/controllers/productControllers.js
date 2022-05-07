@@ -38,7 +38,19 @@ let q =  "INSERT INTO products (name, image, filename, price, brand, category, c
 const getAllProducts = asyncWrapper (async(req,res,next) => {
 
   
-  let q =  "SELECT * FROM  products"
+ // let q =  "SELECT * FROM  products"
+
+
+ /*const q = `SELECT products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (avg(reviews.rating),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews
+FROM products 
+INNER JOIN reviews ON products.product_id = reviews.product_id
+GROUP BY products.product_id` */
+
+const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+FROM products 
+LEFT OUTER JOIN reviews 
+ON products.product_id=reviews.product_id
+GROUP BY products.product_id`
   
    await db.query(q, (err,result) => {
      if(err) {
@@ -139,13 +151,7 @@ if(err) {
   res.status(201).json({ result })
 } 
 })  
-    
-    
-  
-  
-  
-  
-  }  else {
+}  else {
 
 
     let q = 'UPDATE products SET name=?, price=?, brand=?, category=?, countInStock=?, description=? WHERE product_id = ?';
@@ -162,6 +168,62 @@ if(err) {
 
 
 }) 
+
+
+const getProductById = asyncWrapper(async(req,res,next) => {
+  
+  const { id } = req.params;
+  const q = `SELECT * FROM products WHERE product_id = ${id}`
+  
+  await db.query(q, (err,result) => {
+    if(err) {
+      console.log(err)
+    } else {
+      res.status(201).json({ result })
+    }
+  }) 
+}) 
+
+
+/*const getProductById = asyncWrapper(async(req,res,next) => {
+  
+  const { id } = req.params;
+
+
+  /*const q = `SELECT COUNT(*), ROUND (avg(rating),2), user_name, rating, comment 
+    FROM reviews
+    JOIN products
+    ON reviews.product_id = products.product_id
+    GROUP BY products.product_id`  
+
+const q = `SELECT products.product_id, products.name, ROUND (avg(reviews.rating),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews
+FROM products 
+INNER JOIN reviews ON products.product_id = reviews.product_id
+GROUP BY products.product_id`
+
+
+
+
+  
+  await db.query(q, (err,result) => {
+    if(err) {
+      console.log(err)
+    } else {
+      res.status(201).json({ result })
+    }
+  }) 
+}) */
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -189,7 +251,9 @@ module.exports = {
   addProduct,
   getAllProducts,
   deleteProduct,
-  updateProduct
+  updateProduct,
+  getProductById,
+  
     
     
 }
