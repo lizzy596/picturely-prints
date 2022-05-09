@@ -76,7 +76,7 @@ const editHandler = async event => {
     formData.append("countInStock", countInStock)
     formData.append("description", description)
 
-    const response = await fetch(`http://localhost:3001/admin/products/${productToEdit.product_id}`,{method: 'PUT', body: formData})
+    const response = await fetch(`http://localhost:3001/products/${productToEdit.product_id}`,{method: 'PUT', body: formData})
     dispatch({type: ADMIN_END_EDIT_PRODUCT })
     clear()
     navigate('/admin/products')

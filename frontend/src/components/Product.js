@@ -16,7 +16,7 @@ const navigate = useNavigate();
 const getProductDetails = async (id) => {
 
  
-
+ 
  await  getProductById(id)
   navigate(`/product/${id}}`)
   

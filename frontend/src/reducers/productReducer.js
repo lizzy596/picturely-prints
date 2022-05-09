@@ -1,11 +1,14 @@
 import { ADD_PRODUCT, GET_PRODUCTS, GET_PRODUCT, START_LOADING, END_LOADING, 
     JUST_ADDED_PRODUCT, END_JUST_ADDED_PRODUCT, ADMIN_EDIT_PRODUCT, ADMIN_DELETE_PRODUCT,
-    ADMIN_END_DELETE_PRODUCT, ADMIN_END_EDIT_PRODUCT, END_JUST_EDITED_PRODUCT, SET_PRODUCT_ID
+    ADMIN_END_DELETE_PRODUCT, ADMIN_END_EDIT_PRODUCT, 
+    END_JUST_EDITED_PRODUCT, 
+    SET_PRODUCT_ID, 
+    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR
 } from '../constants/productConstants';
 
 
 
-const productReducer = (state = { products: [], productID: null, product: {} ,productToEdit: {}, isLoading: true, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false}, action) => {
+const productReducer = (state = { products: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: true, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false}, action) => {
     switch (action.type) {
 
     
@@ -15,8 +18,10 @@ const productReducer = (state = { products: [], productID: null, product: {} ,pr
             return { ...state, products: [...state.products, action.payload]  };
         
         case GET_PRODUCTS:
-            console.log(action.payload.result)
+          
             return { ...state, products: action.payload.result };
+        case GET_REVIEWS:
+                return { ...state, reviews: action.payload.result };
         
        /* case GET_PRODUCT:
             return { ...state, product: action.payload.result[0] }; */
@@ -47,6 +52,15 @@ const productReducer = (state = { products: [], productID: null, product: {} ,pr
             return { ...state, products: [...state.products], productToEdit: {}, editingProduct:false, justEditedProduct: true};
         case END_JUST_EDITED_PRODUCT:
                 return { ...state, justEditedProduct: false};
+        case JUST_ADDED_REVIEW:
+            return {...state, addedReview: true,  success_message:'Review added successfully' };
+        case END_JUST_ADDED_REVIEW:
+            return {...state, addedReview: false, success_message:''};
+        case SET_ERROR:
+            return { ...state, error: true, error_message: action.payload.data.msg };
+        case END_ERROR:
+            return { ...state, error: false, error_message: '', };
+        
        
     
         default:

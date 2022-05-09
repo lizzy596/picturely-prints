@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Header = () => {
 
-  const { authData } = useSelector((state) => state.userReducer)
+
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   const style ={ marginLeft: '5px', paddingRight: '3px'}
  
@@ -28,7 +29,7 @@ const Header = () => {
 
         
 
-        {authData?.User ? <LinkContainer to='/profile'>
+        {user?.User ? <LinkContainer to='/profile'>
         <Nav.Link><FaUserCircle size={28} style={style}  /> My Profile</Nav.Link>
         </LinkContainer> :
 

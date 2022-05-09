@@ -13,6 +13,7 @@ import AdminDashboard from './screens/AdminDashboard'
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import CartScreen from './screens/CartScreen'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ function App() {
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
+      <Route path="/cart" element={<CartScreen />} />
       <Route path="/product/:id" element={<ProductScreen2 />} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/admin/products" element={<ProductListScreen />} />

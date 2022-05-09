@@ -85,54 +85,6 @@ let q =  `DELETE FROM products WHERE product_id = ${id}`
 }) 
 
 
-/*const updateProduct = asyncWrapper (async(req,res,next) => {
-
-  const { id } = req.params;
- const { name, price, brand, category, countInStock, description } = req.body;
-
-   if(req.file) {
-    const file = req.file.path
-  
-    let q = `UPDATE products SET name=${name}, image=${file}, price=${price}, brand=${brand}, category=${category}, countInStock=${countInStock}, description=${description} WHERE product_id = ${id}`;
-
-await db.query(q, (err,result) => {
-if(err) {
-  console.log(err)
-} else {
-  console.log(result)
-  res.status(201).json({ result })
-} 
-})  
-    
-    
-  
-  
-  
-  
-  }  else {
-
-
-let q = `UPDATE products SET name=${name}, price=${price}, brand=${brand}, category=${category}, countInStock=${countInStock}, description=${description} WHERE product_id = ${id}`;
-
-await db.query(q, (err,result) => {
-if(err) {
-  console.log(err)
-} else {
-  console.log(result)
-  res.status(201).json({ result })
-} 
-})  
-  }
-
-
-
-
-
-
-
-
-}) */
-
 const updateProduct = asyncWrapper (async(req,res,next) => {
 
   const { id } = req.params;
@@ -182,29 +134,17 @@ const getProductById = asyncWrapper(async(req,res,next) => {
       res.status(201).json({ result })
     }
   }) 
+
 }) 
 
 
-/*const getProductById = asyncWrapper(async(req,res,next) => {
-  
+
+
+const getReviewsById = asyncWrapper(async(req, res) => {
   const { id } = req.params;
 
+  const q = `SELECT user_name, rating, product_id, comment, DATE_FORMAT(created_at, '%M %d, %Y') AS created_at FROM reviews WHERE product_id = ${id} ORDER BY created_at DESC`
 
-  /*const q = `SELECT COUNT(*), ROUND (avg(rating),2), user_name, rating, comment 
-    FROM reviews
-    JOIN products
-    ON reviews.product_id = products.product_id
-    GROUP BY products.product_id`  
-
-const q = `SELECT products.product_id, products.name, ROUND (avg(reviews.rating),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews
-FROM products 
-INNER JOIN reviews ON products.product_id = reviews.product_id
-GROUP BY products.product_id`
-
-
-
-
-  
   await db.query(q, (err,result) => {
     if(err) {
       console.log(err)
@@ -212,7 +152,32 @@ GROUP BY products.product_id`
       res.status(201).json({ result })
     }
   }) 
-}) */
+})
+
+const addProductReview = asyncWrapper(async(req, res, next) => {
+
+ 
+const { user_name, rating, comment, user_id, product_id } = req.body
+
+if(!rating || !comment) {
+  
+  return next(createCustomError('Must complete all fields', 401))
+}
+
+  let q =  "INSERT INTO reviews (user_name, rating, comment, user_id, product_id) VALUES (?,?,?,?,?)"
+
+  await db.query(q, [user_name, rating, comment, user_id, product_id], (err,result) => {
+    if(err) {
+      return next(createCustomError('You have already reviewed this item!', 401))
+    } else {
+      res.status(201).json({ result })
+    }
+  })  
+
+})
+
+
+
 
 
 
@@ -253,6 +218,8 @@ module.exports = {
   deleteProduct,
   updateProduct,
   getProductById,
+  getReviewsById,
+  addProductReview
   
     
     

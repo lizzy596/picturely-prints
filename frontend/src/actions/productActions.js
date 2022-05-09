@@ -1,6 +1,6 @@
 import * as api from '../api/index.js';
 
-import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT } from '../constants/productConstants';
+import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET_ERROR, JUST_ADDED_REVIEW } from '../constants/productConstants';
 
 
 
@@ -58,21 +58,37 @@ export const getProductById = (id) => async(dispatch) => {
 
     dispatch({type: START_LOADING})
     const { data } =  await api.getProduct(id)
-
-  
-
     dispatch({ type: GET_PRODUCT, payload: data });
-
     dispatch({ type: END_LOADING });
+} catch (error) {
+  console.log(error.response.data);
+  }
+}
+
+export const getReviewsById = (id) => async(dispatch) => {
+  try {
+
+    dispatch({type: START_LOADING})
+    const { data } =  await api.getReviews(id)
+    dispatch({ type: GET_REVIEWS, payload: data });
+    dispatch({ type: END_LOADING });
+} catch (error) {
+  console.log(error.response.data);
+  }
+}
 
 
+export const addProductReview = (value, id) => async(dispatch) => {
+  try {
 
+    const { data } =  await api.addProductReview(value, id)
 
-
+    dispatch({ type: JUST_ADDED_REVIEW });
     
-  } catch (error) {
+  } catch (err) {
 
-    console.log(error.response.data);
+    dispatch({ type: SET_ERROR, payload: err.response })
     
   }
+  
 }

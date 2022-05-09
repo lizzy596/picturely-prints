@@ -8,7 +8,9 @@ export const login = (formData, navigate) => async (dispatch) => {
 
     dispatch({ type: AUTH, data });
 
-   navigate('/');
+   //navigate('/')
+   navigate(-1)
+   ;
   } catch (err) {
     dispatch({ type: SET_ERROR, payload: err.response })
   }
