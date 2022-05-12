@@ -36,7 +36,7 @@ let hash = bcrypt.hashSync(password, salt);
      } else {
 
         const token = createToken(first_name);
-        res.status(200).json({ User : {email, name: first_name }, token })
+        res.status(200).json({ User : {email, name: first_name, user_id }, token })
          
      }
  }
@@ -69,7 +69,7 @@ const Login = asyncWrapper (async(req,res,next) => {
                 if(response) {
 
                     const token = createToken(result[0].first_name);
-                    res.status(200).json({ User : {email: result[0].email, name: result[0].first_name, isAdmin: result[0].isAdmin}, token })
+                    res.status(200).json({ User : {user_id: result[0].user_id, email: result[0].email, name: result[0].first_name, isAdmin: result[0].isAdmin}, token })
                     
                 
                  

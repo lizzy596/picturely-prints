@@ -26,6 +26,11 @@ export const addProductReview = (value, id) => API.post(`/products/reviews/${id}
 
 
 
+export const placeOrder = (orderInfo) => API.post(`/orders`, orderInfo)
+export const getRecentOrder = (id) => API.get(`/orders/${id}`)
+
+
+
 
 
 

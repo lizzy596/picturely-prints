@@ -10,6 +10,7 @@ const mysql = require('mysql');
 /*const db = require('./DB/database') */
 const authRoutes = require('./routes/auth')
 const productRoutes = require('./routes/productRoutes') 
+const orderRoutes = require('./routes/orderRoutes')
 const notFound = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 
@@ -37,6 +38,7 @@ app.use(cors());
 
 app.use('/auth', authRoutes)
 app.use('/products', productRoutes)
+app.use('/orders', orderRoutes)
 
 
 

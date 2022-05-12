@@ -8,9 +8,14 @@ import { FaRegEdit } from "react-icons/fa";
 import { AiFillDelete, AiOutlinePlus } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
 import Loader from '../components/Loader'
+import { useNavigate } from 'react-router-dom'
 import { START_LOADING, END_LOADING } from '../constants/productConstants'
 
 const CartScreen = ({ match, location, history }) => {
+
+
+  const navigate = useNavigate()
+
   //const productId = match.params.id
 
  // const qty = location.search ? Number(location.search.split('=')[1]) : 1
@@ -22,6 +27,12 @@ const CartScreen = ({ match, location, history }) => {
 
   let [cartItemsLocal, setCartItemsLocal] = useState(JSON.parse(localStorage.getItem("cartItems")))
 
+  const user = JSON.parse(localStorage.getItem('profile'))
+
+
+
+
+
 
 
 useEffect(() => {
@@ -31,9 +42,13 @@ setCartItemsLocal(JSON.parse(localStorage.getItem("cartItems")))
 dispatch({type: END_LOADING })
 }, [cartItems])
 
+
+
+
+
 useEffect(() => {
 
-    dispatch({type: START_LOADING })
+dispatch({type: START_LOADING })
 setCartItemsLocal(JSON.parse(localStorage.getItem("cartItems")))
 dispatch({type: END_LOADING })
 }, [])
@@ -59,8 +74,24 @@ dispatch({type: END_LOADING })
   }
 
   const checkoutHandler = () => {
-    history.push('/login?redirect=shipping')
+    if(!user) {
+
+      navigate('/login')
+      return
+
+    } else {
+
+      navigate('/shipping')
+      return
+
+    }
+
+    
   } 
+
+  const continueShoppingHandler = () => {
+    navigate('/')
+  }
 
  
 const style1 = { color: "red", fontSize: "1.5em" , marginLeft: '30px'}
@@ -139,11 +170,24 @@ if (isLoading) {
               <Button
                 type='button'
                 className='btn-block'
-                disabled={cartItems.length === 0}
+                disabled={cartItemsLocal.length === 0}
                 onClick={checkoutHandler}
               >
                 Proceed To Checkout
               </Button>
+
+              <Button
+                type='button'
+                className='btn-block'
+                variant="info"
+                className="my-3"
+                
+                onClick={continueShoppingHandler}
+              >
+                Continue Shopping
+              </Button>
+          
+             
             </ListGroup.Item>
           </ListGroup>
         </Card>
