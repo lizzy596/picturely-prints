@@ -5,7 +5,7 @@ import { AUTH, SET_ERROR, END_ERROR } from '../constants/userConstants';
 
 
 
-const userReducer = (state = { authData: null, loading: false, userInfo: null, error: false, error_message: '', userLogin: null }, action) => {
+const userReducer = (state = { authData: null, loading: false, userInfo: null,  success_message: '', error: false, error_message: '', userLogin: null }, action) => {
     switch (action.type) {
 
 

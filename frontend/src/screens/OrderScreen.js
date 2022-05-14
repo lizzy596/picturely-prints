@@ -86,11 +86,11 @@ const OrderScreen = () => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Name: </strong> {user.User.name}
+                <strong>Name: </strong> {user?.first_name} {user?.last_name}
               </p>
               <p>
                 <strong>Email: </strong>{' '}
-                {user.User.email}
+                {user?.email}
               </p>
               <p>
                 <strong>Address:   </strong>
@@ -190,7 +190,7 @@ const OrderScreen = () => {
               )}
               {loadingDeliver && <Loader />}
               {user &&
-                user.User.isAdmin === 1 &&
+                user.isAdmin === 1 &&
                 isPaid &&
                 !isDelivered && (
                   <ListGroup.Item>

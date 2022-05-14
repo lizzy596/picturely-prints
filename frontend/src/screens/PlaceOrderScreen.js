@@ -38,7 +38,9 @@ const PlaceOrderScreen = ({ history }) => {
 
 
 
-  const [userId, setUserId] = useState(user?.User?.user_id)
+  const [userId, setUserId] = useState(user?.user_id)
+
+  console.log(userId)
 
 
   //const { cartItems }  = useSelector((state) => state.cartReducer)

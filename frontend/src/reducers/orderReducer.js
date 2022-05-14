@@ -3,7 +3,7 @@ import { SET_ERROR, END_ERROR, START_LOADING, END_LOADING, GET_RECENT_ORDER } fr
 
 
 
-const orderReducer = (state = { order: {}, error:false, isLoading: false }, action) => {
+const orderReducer = (state = { order: {}, loadingOrders: false, errorOrders: false, error:false, isLoading: false }, action) => {
     switch (action.type) {
 
 

@@ -1,12 +1,12 @@
 const db = require("../DB/database");
 const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom-error')
-const { CREATE_ORDER } = require
+//const { CREATE_ORDER } = require
 
 
 
 
-const addOrder = asyncWrapper(async(req, res) => {
+const addOrder = asyncWrapper(async(req, res, next) => {
 
   const { userId, cartItems, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice  } = req.body
 
@@ -26,7 +26,7 @@ let q =  "INSERT INTO orders (order_items, customer_id, shippingAddress, payment
 })
 
 
-const getMostRecentOrder = asyncWrapper(async(req, res) => {
+const getMostRecentOrder = asyncWrapper(async(req, res, next) => {
 
    
 

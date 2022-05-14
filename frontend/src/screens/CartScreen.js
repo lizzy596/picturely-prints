@@ -74,7 +74,7 @@ dispatch({type: END_LOADING })
   }
 
   const checkoutHandler = () => {
-    if(!user) {
+    if(!user?.user_id) {
 
       navigate('/login')
       return

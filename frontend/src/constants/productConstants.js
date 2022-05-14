@@ -17,4 +17,5 @@ export const SET_ERROR = 'SET_ERROR';
 export const END_ERROR = 'END_ERROR';
 export const JUST_ADDED_REVIEW = 'JUST_ADDED_REVIEW';
 export const END_JUST_ADDED_REVIEW = 'END_JUST_ADDED_REVIEW';
+export const GET_TOP_PRODUCTS = 'GET_TOP_PRODUCTS';
 

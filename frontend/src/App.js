@@ -1,11 +1,11 @@
 import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import HomeScreen from './screens/HomeScreen'
+
 import OrderScreen from './screens/OrderScreen'
-import HomeScreen2 from './screens/HomeScreen2'
+import HomeScreen from './screens/HomeScreen'
+
 import ProductScreen from './screens/ProductScreen'
-import ProductScreen2 from './screens/ProductScreen2'
 import AdminProductList from './screens/AdminProductList'
 import PaymentScreen from './screens/PaymentScreen'
 import ProductListScreen from './screens/ProductListScreen'
@@ -18,10 +18,22 @@ import RegisterScreen from './screens/RegisterScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import CartScreen from './screens/CartScreen'
 import ShippingScreen from './screens/ShippingScreen'
+import ProductCarousel from './components/ProductCarousel'
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
+
+
+  const user = JSON.parse(localStorage.getItem('profile'));
+
+  
+
+
+
+
+
+
   return (
     <>
     <BrowserRouter>
@@ -29,7 +41,8 @@ function App() {
      <main className="py-3">
        <Container>
       <Routes>
-      <Route path="/" element={<HomeScreen2 />} />
+      <Route path="/" element={<HomeScreen />} />
+      <Route path="/carousel" element={<ProductCarousel />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/profile" element={<ProfileScreen />} />
@@ -38,11 +51,13 @@ function App() {
       <Route path="/payment" element={<PaymentScreen />} />
       <Route path="/placeorder" element={<PlaceOrderScreen />} />
       <Route path="/homer" element={<OrderScreen />} />
-      <Route path="/product/:id" element={<ProductScreen2 />} />
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/admin/products" element={<ProductListScreen />} />
-      <Route path="/admin/products/add" element={<AddProductScreen />} />
-      <Route path="/admin/products/edit" element={<EditProductScreen />} />
+      <Route path="/product/:id" element={<ProductScreen />} />
+      <Route path="/admin" element={user.isAdmin === 1 ? <AdminDashboard /> : <Navigate to='/' /> } />
+      <Route path="/admin/products" element={user.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/products/add" element={user.isAdmin === 1 ? <AddProductScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/products/edit" element={user.isAdmin === 1 ? <EditProductScreen /> : <Navigate to='/' /> } />
+      
+     
 
    
        </Routes>

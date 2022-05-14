@@ -63,6 +63,50 @@ GROUP BY products.product_id`
   }) 
 
 
+
+  
+const getTopProducts = asyncWrapper (async(req,res,next) => {
+
+  
+
+ const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+ FROM products 
+ LEFT OUTER JOIN reviews 
+ ON products.product_id=reviews.product_id
+ GROUP BY products.product_id
+ ORDER BY averageRating DESC LIMIT 3`
+   
+    await db.query(q, (err,result) => {
+      if(err) {
+        console.log(err)
+      } else {
+        res.status(201).json({ result })
+      }
+    }) 
+   
+   }) 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   const deleteProduct = asyncWrapper (async(req,res,next) => {
 
     const { id } = req.params;
@@ -140,7 +184,7 @@ const getProductById = asyncWrapper(async(req,res,next) => {
 
 
 
-const getReviewsById = asyncWrapper(async(req, res) => {
+const getReviewsById = asyncWrapper(async(req, res, next) => {
   const { id } = req.params;
 
   const q = `SELECT user_name, rating, product_id, comment, DATE_FORMAT(created_at, '%M %d, %Y') AS created_at FROM reviews WHERE product_id = ${id} ORDER BY created_at DESC`
@@ -219,7 +263,8 @@ module.exports = {
   updateProduct,
   getProductById,
   getReviewsById,
-  addProductReview
+  addProductReview,
+  getTopProducts
   
     
     

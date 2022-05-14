@@ -2,13 +2,14 @@ import { ADD_PRODUCT, GET_PRODUCTS, GET_PRODUCT, START_LOADING, END_LOADING,
     JUST_ADDED_PRODUCT, END_JUST_ADDED_PRODUCT, ADMIN_EDIT_PRODUCT, ADMIN_DELETE_PRODUCT,
     ADMIN_END_DELETE_PRODUCT, ADMIN_END_EDIT_PRODUCT, 
     END_JUST_EDITED_PRODUCT, 
-    SET_PRODUCT_ID, 
+    SET_PRODUCT_ID,
+    GET_TOP_PRODUCTS, 
     GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR
 } from '../constants/productConstants';
 
 
 
-const productReducer = (state = { products: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: true, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false}, action) => {
+const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false}, action) => {
     switch (action.type) {
 
     
@@ -20,6 +21,11 @@ const productReducer = (state = { products: [], error: false, success_message: '
         case GET_PRODUCTS:
           
             return { ...state, products: action.payload.result };
+
+        case GET_TOP_PRODUCTS:
+            return { ...state, topProducts: action.payload.result };
+
+
         case GET_REVIEWS:
                 return { ...state, reviews: action.payload.result };
         

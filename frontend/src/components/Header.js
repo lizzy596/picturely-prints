@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import { FaShoppingCart, FaUserCircle } from 'react-icons/fa'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -7,10 +8,17 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Header = () => {
 
-
+  const { authData }  = useSelector((state) => state.userReducer);
   const user = JSON.parse(localStorage.getItem('profile'));
 
   const style ={ marginLeft: '5px', paddingRight: '3px'}
+
+
+  useEffect(() => {
+
+  }, [authData])
+
+ 
  
 
   return (
@@ -29,7 +37,7 @@ const Header = () => {
 
         
 
-        {user?.User ? <LinkContainer to='/profile'>
+        {user?.email ? <LinkContainer to='/profile'>
         <Nav.Link><FaUserCircle size={28} style={style}  /> My Profile</Nav.Link>
         </LinkContainer> :
 
