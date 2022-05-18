@@ -18,4 +18,6 @@ export const END_ERROR = 'END_ERROR';
 export const JUST_ADDED_REVIEW = 'JUST_ADDED_REVIEW';
 export const END_JUST_ADDED_REVIEW = 'END_JUST_ADDED_REVIEW';
 export const GET_TOP_PRODUCTS = 'GET_TOP_PRODUCTS';
+export const FETCH_BY_SEARCH = 'FETCH_BY_SEARCH';
+export const END_SEARCH = 'END_SEARCH';
 

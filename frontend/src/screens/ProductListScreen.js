@@ -41,7 +41,11 @@ const editHandler = (id) => {
 
 }
 
+useEffect(() => {
 
+  dispatch(getProducts())
+
+}, [])
 
 
 

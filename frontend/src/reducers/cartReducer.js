@@ -42,7 +42,13 @@ const cartReducer = ( state = { cartItems: [],  shippingAddress: {} }, action) =
       return {
         ...state,
         cartItems: state.cartItems.filter((x) => x.product !== action.payload),
-      }
+      };
+
+      case CART_CLEAR_ITEMS:
+        return {
+          ...state,
+          cartItems: []
+        };
        
     
         default:

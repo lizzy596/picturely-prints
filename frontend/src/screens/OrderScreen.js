@@ -3,16 +3,19 @@ import axios from 'axios'
 //import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
-  getMostRecentOrder,
+  getOrderById,
   
 } from '../actions/orderActions'
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
+  START_LOADING, 
+  END_LOADING
 } from '../constants/orderConstants'
 
 const OrderScreen = () => {
@@ -21,20 +24,26 @@ const OrderScreen = () => {
  
 
   const dispatch = useDispatch()
+  const { id } = useParams()
 
-  const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'))
+  //const address = JSON.parse(localStorage.getItem('shippingAddress'))
+
+
   const user = JSON.parse(localStorage.getItem('profile'))
-  const { isLoading, order }  = useSelector((state) => state.orderReducer);
+  const { loadingOrders, order }  = useSelector((state) => state.orderReducer);
+
+
+ 
 
 
 
 
-  
-
-  const [isDelivered, setIsDelivered] = useState(false)
-  const [isPaid, setIsPaid] = useState(false)
+  //const [isDelivered, setIsDelivered] = useState(0)
+  //const [isPaid, setIsPaid] = useState(0)
   const [orderItems, setOrderItems] = useState([])
   const [loadingDeliver, setLoadingDeliver] = useState(false)
+ //const [items, setItems] = useState([])
+
 
 
 
@@ -42,9 +51,27 @@ const OrderScreen = () => {
 
   }
 
+
+  
+
+useEffect(() => {
+
+  if(id) {
+
+    dispatch({type: START_LOADING})
+    dispatch(getOrderById(id))
+    dispatch({type: END_LOADING})
+
+
+  }
+
+
+
+}, [])
+
  
 
-  if (isLoading) {
+  if (loadingOrders) {
  
     return (
      <Loader />
@@ -52,11 +79,24 @@ const OrderScreen = () => {
   } 
 
 
-  const items = JSON.parse(order[0].order_items)
-  const address = JSON.parse(order[0].shippingAddress)
+  let items = [];
+  let address = {};
 
 
-  if (!isLoading) {
+  if(order.length > 0) {
+
+    items = JSON.parse(order[0]?.order_items)
+    address =  JSON.parse(order[0]?.shippingAddress)
+
+  }
+
+
+
+
+  //const address = JSON.parse(order[0]?.shippingAddress)
+
+
+  if (!loadingOrders && order.length > 0) {
     //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2)
@@ -67,6 +107,8 @@ const OrderScreen = () => {
     )
   }
 
+
+  console.log(order[0])
 
 
 
@@ -79,7 +121,7 @@ const OrderScreen = () => {
   return  (
  
     <>
-      <h1>Order ID: {order[0].order_id}</h1>
+      <h1>Order ID: {order[0]?.order_id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
@@ -94,11 +136,11 @@ const OrderScreen = () => {
               </p>
               <p>
                 <strong>Address:   </strong>
-                {address.address}, {address.city}{' '}
-                {address.postalCode},{' '}
-                {address.country}
+                {address?.address}, {address?.city}{' '}
+                {address?.postalCode},{' '}
+                {address?.country}
               </p>
-              {order[0].isDelivered ? (
+              {order[0]?.isDelivered === 1 ? (
                 <Message variant='success'>
                   Delivered on delivery time
                 </Message>
@@ -111,9 +153,9 @@ const OrderScreen = () => {
               <h2>Payment Method</h2>
               <p>
                 <strong>Method: </strong>
-                {order[0].paymentMethod}
+                {order[0]?.paymentMethod}
               </p>
-              {order[0].isPaid ? (
+              {order[0]?.isPaid === 1 ? (
                 <Message variant='success'>Paid on date order paid</Message>
               ) : (
                 <Message variant='danger'>Not Paid</Message>
@@ -162,28 +204,28 @@ const OrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>{items.itemsPrice}</Col>
+                  <Col>${items.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${order[0].shippingPrice}</Col>
+                  <Col>${order[0]?.shippingPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${order[0].taxPrice}</Col>
+                  <Col>${order[0]?.taxPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order[0].totalPrice}</Col>
+                  <Col>${order[0]?.totalPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
-              {!isPaid && (
+              {!order[0]?.isPaid && user.isAdmin === 0 && (
                 <ListGroup.Item>
                  <Button>PayPal Button</Button>
                 </ListGroup.Item>
@@ -191,8 +233,8 @@ const OrderScreen = () => {
               {loadingDeliver && <Loader />}
               {user &&
                 user.isAdmin === 1 &&
-                isPaid &&
-                !isDelivered && (
+                order[0]?.isPaid &&
+                !order[0]?.isDelivered && (
                   <ListGroup.Item>
                     <Button
                       type='button'

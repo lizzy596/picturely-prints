@@ -1,5 +1,5 @@
 import * as api from '../api/index.js';
-import {CREATE_ORDER, START_LOADING, END_LOADING, GET_RECENT_ORDER } from '../constants/orderConstants';
+import {CREATE_ORDER, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS } from '../constants/orderConstants';
 
 
 
@@ -17,11 +17,30 @@ export const addOrder = (orderInfo) => async (dispatch) => {
 }
 
 
-export const getMostRecentOrder = (id) => async (dispatch) => {
-
-    dispatch({ type: START_LOADING });
-    const { data } = await api.getRecentOrder(id)
-
-   dispatch({ type: GET_RECENT_ORDER, payload: data });
-   dispatch({ type: END_LOADING });
+export const getOrderById = (id) => async (dispatch) => {
+    //dispatch({ type: START_LOADING });
+    const { data } = await api.getOrder(id)
+     dispatch({ type: GET_ORDER_BY_ID, payload: data });
 }
+
+
+
+export const getUserOrdersById = (id) => async (dispatch) => {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.getUserOrders(id)
+    dispatch({ type: GET_USER_ORDERS, payload: data });
+    dispatch({ type: END_LOADING });
+}
+
+
+
+export const allOrders = () => async (dispatch) => {
+    dispatch({ type: START_LOADING });
+    const { data } = await api.getAllOrders()
+
+    
+    dispatch({ type: GET_ALL_ORDERS, payload: data });
+    dispatch({ type: END_LOADING });
+}
+
+

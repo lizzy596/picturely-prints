@@ -4,78 +4,121 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import { updateUserDetail } from '../actions/userActions'
+import { getUserOrdersById  } from '../actions/orderActions'
+import { END_ERROR, END_SUCCESS, LOG_OUT } from '../constants/userConstants'
+import { START_LOADING, END_LOADING } from '../constants/orderConstants'
+import { ImCross } from "react-icons/im"
+import { useNavigate } from 'react-router-dom'
 //import { getUserDetails, updateUserProfile } from '../actions/userActions'
 //import { listMyOrders } from '../actions/orderActions'
 //import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 
 const ProfileScreen = ({ location, history }) => {
+
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const navigate = useNavigate()
+
+
+
+
+  const [id, setId] = useState(null)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
-  const [orders, setOrders] = useState([])
+
 
   const dispatch = useDispatch()
 
-  const { error, error_message, success_message, isLoading }  = useSelector((state) => state.userReducer);
-  const { loadingOrders, errorOrders }  = useSelector((state) => state.userReducer);
+  const { error, success, error_message, success_message, isLoading }  = useSelector((state) => state.userReducer);
+  const { orders, loadingOrders, errorOrders }  = useSelector((state) => state.orderReducer);
 
-  const user = JSON.parse(localStorage.getItem('profile'));
 
-  /*const userDetails = useSelector((state) => state.userDetails)
-  const { loading, error, user } = userDetails
+useEffect(() => {
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
 
-  const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
-  const { success } = userUpdateProfile
+  if(!user.user_id) {
+    navigate('/login')
+    return
+  }
 
-  const orderListMy = useSelector((state) => state.orderListMy)
-  const { loading: loadingOrders, error: errorOrders, orders } = orderListMy */
+  if(user) {
+    setId(user.user_id)
+    setEmail(user.email)
+    setFirstName(user.first_name)
+    setLastName(user.last_name)
+  }
 
-  /*useEffect(() => {
-    if (!userInfo) {
-      history.push('/login')
-    } else {
-      if (!user || !user.name || success) {
-        dispatch({ type: USER_UPDATE_PROFILE_RESET })
-        dispatch(getUserDetails('profile'))
-        dispatch(listMyOrders())
-      } else {
-        setName(user.name)
-        setEmail(user.email)
-      }
-    }
-  }, [dispatch, history, userInfo, user, success]) */
 
-  /*const submitHandler = (e) => {
+ 
+ 
+
+
+  dispatch(getUserOrdersById(user.user_id))
+  dispatch({type: END_LOADING})
+
+}, [])
+
+
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+
+    dispatch({type: END_SUCCESS})
+    
+  }, 2000);
+  return () => clearTimeout(timer);
+}, [success]);
+
+
+const productDetails = () => {
+
+  dispatch({type: START_LOADING})
+ 
+
+}
+
+
+
+
+
+
+  const submitHandler = (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
-    } else {
-      dispatch(updateUserProfile({ id: user._id, name, email, password }))
-    }
-  } */
+    dispatch({type: END_ERROR})
+    dispatch(updateUserDetail({id, firstName, lastName, password, confirmPassword, email}))
+    setPassword('')
+    setConfirmPassword('')
 
-  const submitHandler = () => {
+  }
 
+  const logOut = () => {
+    dispatch({type: LOG_OUT})
+    navigate('/')
+  }
+
+
+
+     
+  if (isLoading || loadingOrders) {
+ 
+    return (
+     <Loader />
+    );
   }
 
   return (
     <Row>
       <Col md={3}>
         <h2 className="my-5">User Profile</h2>
-        {message && <Message variant='danger'>{message}</Message>}
-        {}
-        {success_message && <Message variant='success'>Profile Updated</Message>}
-        {isLoading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='danger'>{error}</Message>
-        ) : (
+       
+        {success && <Message variant='success'>{success_message}</Message>}
+        {error && <Message variant='danger'>{error_message}</Message>}
+      
+        
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='first_name' className="my-3">
               
@@ -133,10 +176,16 @@ const ProfileScreen = ({ location, history }) => {
             </Form.Group>
 
             <Button type='submit' variant='primary'>
-              Update
+              Update Profile
             </Button>
+
+           
           </Form>
-        )}
+
+          <Button  variant='danger' onClick={logOut} size="lg" className="my-5">
+              Logout
+            </Button>
+        
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
@@ -158,30 +207,32 @@ const ProfileScreen = ({ location, history }) => {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+                <tr key={order.order_id}>
+                  <td>{order.order_id}</td>
+                  <td>{order.created_at}</td>
+                  <td>${order.totalPrice}.00</td>
                   <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
+                    {order.isPaid === 1 ? (
+                      <p>paid</p>
                     ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                     
+                    <ImCross style={{ color: 'red' }}/> 
                     )}
                   </td>
                   <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
+                    {order.isDelivered === 1 ? (
+                      <p>order delivered</p>
                     ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
+                      <ImCross style={{ color: 'red' }}/> 
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Button className='btn-sm' variant='light'>
+                  <LinkContainer to={`/order/${order.order_id}`}>
+                      <Button  onClick={productDetails}className='btn-sm' variant='light'>
                         Details
                       </Button>
                     </LinkContainer>
+                    
                   </td>
                 </tr>
               ))}

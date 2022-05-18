@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const mysql = require('mysql');
 /*const db = require('./DB/database') */
-const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/userRoutes')
 const productRoutes = require('./routes/productRoutes') 
 const orderRoutes = require('./routes/orderRoutes')
 const notFound = require('./middleware/not-found')
@@ -36,7 +36,7 @@ app.use(cors());
 
 
 
-app.use('/auth', authRoutes)
+app.use('/auth', userRoutes)
 app.use('/products', productRoutes)
 app.use('/orders', orderRoutes)
 

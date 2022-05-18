@@ -26,15 +26,11 @@ let q =  "INSERT INTO orders (order_items, customer_id, shippingAddress, payment
 })
 
 
-const getMostRecentOrder = asyncWrapper(async(req, res, next) => {
+const getOrderById = asyncWrapper(async(req, res, next) => {
 
-   
+   const { id } = req.params
 
-const { id } = req.params
-
-
-
-    const q = `SELECT * FROM orders WHERE customer_id = ${id} ORDER BY created_at DESC LIMIT 1`
+   const q = `SELECT * FROM orders WHERE order_id = ${id}`
 
     await db.query(q, (err,result) => {
       if(err) {
@@ -44,11 +40,36 @@ const { id } = req.params
       }
     })  
 
-   
-
-
-   
 })
+
+
+const getUserOrders = asyncWrapper(async(req, res, next) => {
+  const { id } = req.params
+  const q = `SELECT order_id, totalPrice, isPaid, isDelivered, DATE_FORMAT(created_at, '%M %d, %Y at %h:%i %p') AS created_at FROM orders WHERE customer_id = ${id} ORDER BY created_at DESC`
+  await db.query(q, (err,result) => {
+     if(err) {
+       console.log(err)
+     } else {
+       res.status(201).json({ result })
+     }
+   })  
+})
+
+const getAllOrders = asyncWrapper(async(req, res, next) => {
+  
+  const q = `SELECT order_id, customer_id, totalPrice, isPaid, isDelivered, DATE_FORMAT(created_at, '%M %d, %Y at %h:%i %p') AS created_at FROM orders ORDER BY created_at DESC`
+  await db.query(q, (err,result) => {
+     if(err) {
+       console.log(err)
+     } else {
+       res.status(201).json({ result })
+     }
+   })  
+})
+
+
+
+
 
 
 
@@ -61,6 +82,8 @@ const { id } = req.params
 
 module.exports = {
     addOrder,
-    getMostRecentOrder
+    getOrderById,
+    getUserOrders,
+    getAllOrders
     
     }

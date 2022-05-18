@@ -1,7 +1,9 @@
 export const CREATE_ORDER = 'CREATE_ORDER'
 export const START_LOADING = 'START_LOADING'
 export const END_LOADING = 'END_LOADING'
-export const GET_RECENT_ORDER = 'GET_RECENT_ORDER'
+export const GET_ORDER_BY_ID = 'GET_ORDER_BY_ID'
+export const GET_USER_ORDERS = 'GET_USER_ORDERS'
+export const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
 
 
 

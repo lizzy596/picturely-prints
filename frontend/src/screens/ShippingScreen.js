@@ -14,7 +14,7 @@ const ShippingScreen = ({ history }) => {
 
   const shippingAddress = JSON.parse(localStorage.getItem('shippingAddress'))
 
-  console.log(shippingAddress)
+
 
 
 

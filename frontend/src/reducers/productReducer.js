@@ -4,12 +4,13 @@ import { ADD_PRODUCT, GET_PRODUCTS, GET_PRODUCT, START_LOADING, END_LOADING,
     END_JUST_EDITED_PRODUCT, 
     SET_PRODUCT_ID,
     GET_TOP_PRODUCTS, 
-    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR
+    FETCH_BY_SEARCH,
+    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR, END_SEARCH
 } from '../constants/productConstants';
 
 
 
-const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false}, action) => {
+const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false, isSearching: false}, action) => {
     switch (action.type) {
 
     
@@ -35,6 +36,10 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         
         case GET_PRODUCT:
                 return { ...state, product: state.products.find((item) => item.product_id === action.payload.result[0].product_id)};
+        case FETCH_BY_SEARCH:
+                return { ...state, products: action.payload.result, isSearching: true};
+        case END_SEARCH:
+                return { ...state, isSearching: false}
 
 
 

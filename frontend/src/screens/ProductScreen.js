@@ -66,8 +66,8 @@ return
 useEffect(() => {
     if(addedReview) {
         dispatch({type: START_LOADING })
-        //dispatch(getProducts())
-        //dispatch(getProductById(id))
+        dispatch(getProducts())
+        dispatch(getProductById(id))
         dispatch(getReviewsById(id))
         dispatch({type: END_LOADING})
 
@@ -82,6 +82,15 @@ useEffect(() => {
     }, 2000);
     return () => clearTimeout(timer);
   }, [success_message]);
+
+  
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        dispatch({type: END_ERROR })
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [error_message]);
 
 
 
@@ -107,9 +116,12 @@ const submitHandler = (e) => {
     e.preventDefault()
     dispatch({type: END_ERROR })
   
-  
+    if(!user.user_id) {
+      navigate('/login')
+      return
+    }
     dispatch({type: START_LOADING })
-    dispatch(addProductReview({product_id: product.product_id, comment, rating, user_id: user.email, user_name: user.first_name}, id))
+    dispatch(addProductReview({product_id: product.product_id, comment, rating, user_id: user.user_id, user_name: user.first_name}, id))
     dispatch({type: END_LOADING})
     setRating(0)
     setComment('')

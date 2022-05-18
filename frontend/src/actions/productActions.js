@@ -1,6 +1,6 @@
 import * as api from '../api/index.js';
 
-import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET_ERROR, JUST_ADDED_REVIEW, GET_TOP_PRODUCTS } from '../constants/productConstants';
+import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET_ERROR, JUST_ADDED_REVIEW, GET_TOP_PRODUCTS, FETCH_BY_SEARCH } from '../constants/productConstants';
 
 
 
@@ -115,3 +115,20 @@ export const addProductReview = (value, id) => async(dispatch) => {
   }
   
 }
+
+export const getProductsBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING });
+  
+
+
+    //const { data: { data } } = await api.fetchPostsBySearch(indicator, searchItem);
+    const { data } = await api.fetchProductsBySearch(searchQuery);
+   
+    dispatch({ type: FETCH_BY_SEARCH, payload: data  });
+    dispatch({ type: END_LOADING });
+  } catch (err) {
+    dispatch({ type: SET_ERROR, payload: err.response })
+   
+  }
+};

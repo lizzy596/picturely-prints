@@ -37,15 +37,6 @@ let q =  "INSERT INTO products (name, image, filename, price, brand, category, c
 
 const getAllProducts = asyncWrapper (async(req,res,next) => {
 
-  
- // let q =  "SELECT * FROM  products"
-
-
- /*const q = `SELECT products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (avg(reviews.rating),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews
-FROM products 
-INNER JOIN reviews ON products.product_id = reviews.product_id
-GROUP BY products.product_id` */
-
 const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
 FROM products 
 LEFT OUTER JOIN reviews 
@@ -86,6 +77,33 @@ const getTopProducts = asyncWrapper (async(req,res,next) => {
    
    }) 
 
+
+
+const getProductsBySearch = asyncWrapper (async(req,res,next) => {
+
+const { searchQuery } = req.query;
+
+let searchTerm = `${searchQuery}%`
+
+const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+FROM products  
+LEFT OUTER JOIN reviews 
+ON products.product_id=reviews.product_id
+WHERE LOWER(products.name) LIKE '${searchTerm}'
+GROUP BY products.product_id`
+
+    //const q = `SELECT product_id FROM products WHERE LOWER(products.name) LIKE '${searchTerm}'`
+await db.query(q, (err,result) => {
+     if(err) {
+       console.log(err)
+     } else {
+       res.status(201).json({ result })
+     } 
+
+   }) 
+
+}) 
+
  
  
  
@@ -108,11 +126,7 @@ const getTopProducts = asyncWrapper (async(req,res,next) => {
  
  
   const deleteProduct = asyncWrapper (async(req,res,next) => {
-
-    const { id } = req.params;
-
-   
-  
+ const { id } = req.params;
 let q =  `DELETE FROM products WHERE product_id = ${id}`
  await db.query(q, (err,result) => {
   if(err) {
@@ -123,9 +137,6 @@ let q =  `DELETE FROM products WHERE product_id = ${id}`
     res.status(201).json({ result })
   }
 }) 
-
-
-
 }) 
 
 
@@ -264,7 +275,8 @@ module.exports = {
   getProductById,
   getReviewsById,
   addProductReview,
-  getTopProducts
+  getTopProducts,
+  getProductsBySearch
   
     
     

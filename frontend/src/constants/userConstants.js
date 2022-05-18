@@ -1,6 +1,36 @@
 export const AUTH = 'AUTH';
 export const SET_ERROR = 'SET_ERROR';
 export const END_ERROR = 'END_ERROR';
+export const START_LOADING = 'START_LOADING';
+export const END_LOADING = 'END_LOADING';
+export const SET_SUCCESS = 'SET_SUCCESS';
+export const END_SUCCESS = 'END_SUCCESS';
+export const LOG_OUT = 'LOG_OUT';
+
+
+
+
+
+
+
+export const UPDATE_USER_DETAILS = 'UPDATE_USER_DETAILS'
+
+
+
+//Admin routes
+
+export const GET_ALL_USERS = 'GET_ALL_USERS';
+export const ADMIN_DELETE_USER = 'ADMIN_DELETE_USER';
+export const ADMIN_END_DELETE_USER= 'ADMIN_END_DELETE_USER';
+export const ADMIN_EDIT_USER = 'ADMIN_EDIT_USER';
+export const ADMIN_END_JUST_EDITED_USER = 'ADMIN_END_JUST_EDITED_USER';
+export const DELETE_USER = 'DELETE_USER';
+
+
+
+
+
+
 
 
 
@@ -9,3 +39,6 @@ export const USER_DETAILS_REQUEST = 'USER_DETAILS_REQUEST'
 export const USER_DETAILS_SUCCESS = 'USER_DETAILS_SUCCESS'
 export const USER_DETAILS_FAIL = 'USER_DETAILS_FAIL'
 export const USER_DETAILS_RESET = 'USER_DETAILS_RESET'
+export const SET_EDIT_SUCCESS = 'SET_EDIT_SUCCESS';
+export const SET_DELETE_SUCCESS = 'SET_DELETE_SUCCESS';
+

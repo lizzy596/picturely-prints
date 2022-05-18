@@ -8,7 +8,8 @@ import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
 import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 import { USER_DETAILS_RESET } from '../constants/userConstants'
-import { addOrder, getMostRecentOrder } from '../actions/orderActions'
+import { CART_CLEAR_ITEMS } from '../constants/cartConstants'
+import { addOrder } from '../actions/orderActions'
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch()
@@ -113,15 +114,13 @@ const placeOrderHandler = () => {
   
 
 dispatch(addOrder({userId, cartItems, shippingAddress, paymentMethod, totalPrice, taxPrice, shippingPrice }))
+localStorage.removeItem('cartItems');
+dispatch({type:CART_CLEAR_ITEMS})
+
+navigate('/profile')
 }
 
 
-const recentOrderHandler = () => {
-
-  dispatch(getMostRecentOrder(userId))
-  navigate('/homer')
-
-}
 
 
 
@@ -224,15 +223,7 @@ const recentOrderHandler = () => {
                 </Button>
 
 
-                <Button
-                  type='button'
-                  className='btn-block'
-                  className="my-3"
-                  
-                  onClick={recentOrderHandler}
-                >
-                  Get Most Recent Order
-                </Button>
+              
               </ListGroup.Item>
             </ListGroup>
           </Card>

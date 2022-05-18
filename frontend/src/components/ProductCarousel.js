@@ -12,7 +12,7 @@ const ProductCarousel = () => {
 
   const { topProducts, error, isLoading, error_message } = useSelector((state) => state.productReducer)
 
-  console.log(topProducts)
+ 
   
 
   useEffect(() => {
