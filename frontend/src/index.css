@@ -58,9 +58,18 @@ footer {
 
 .search-form {
   display: flex;
+  width: 300px;
+ 
+ 
 }
 
-.search-bar {
-  margin-left: 40px;
+.search-container {
+  display: flex;
 }
+
+
+.paginate {
+  display:flex
+}
+
 

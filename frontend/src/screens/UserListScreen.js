@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getAllUsers} from '../actions/userActions'
@@ -10,6 +10,7 @@ import { AiFillDelete, AiOutlinePlus } from "react-icons/ai"
 import { FaRegEdit, FaCheck, FaTimes } from "react-icons/fa";
 import { adminUserDelete } from '../actions/userActions'
 import { ADMIN_EDIT_USER, START_LOADING, END_SUCCESS, SET_DELETE_SUCCESS } from '../constants/userConstants'
+import Paginate from '../components/Paginate'
 
 
 const UserListScreen = () => {
@@ -20,10 +21,9 @@ const UserListScreen = () => {
   const { error, isLoading, error_message, users, success, success_message }  = useSelector((state) => state.userReducer);
 
 
-  const [user1, setUser1] = useState([])
+ 
 
 
-console.log(success_message)
 
  
 
@@ -153,6 +153,8 @@ if (isLoading) {
             ))}
           </tbody>
         </Table>
+
+   
       
     </>
   )

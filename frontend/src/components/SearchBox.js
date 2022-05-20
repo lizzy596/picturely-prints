@@ -1,21 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+import { SET_KEYWORD } from '../constants/productConstants';
 import { getProductsBySearch } from '../actions/productActions'
 
-const SearchBox = ({ history }) => {
+const SearchBox = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState(null)
+
+
+
+
+  const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
+
+useEffect(()=> {
+  if(!searchTerm) {
+    setKeyword(null)
+  }
+
+}, [])
+
+
+const clear = () => {
+  setKeyword(null)
+}
+
 
   const submitHandler = (e) => {
     e.preventDefault()
    
     if (keyword.trim()) {
+
+      //dispatch({ type: SET_KEYWORD, payload: keyword})
+      localStorage.setItem('searchTerm', JSON.stringify(keyword));
       dispatch(getProductsBySearch(keyword))
-      navigate(`/${keyword}`)
-      setKeyword('')
+      clear()
+      //navigate(`/${keyword}`)
+      navigate('/')
+    
     } else {
       navigate('/')
     }

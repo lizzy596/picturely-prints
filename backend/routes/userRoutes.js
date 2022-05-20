@@ -10,6 +10,9 @@ router.route('/register').post(Register)
 router.route('/login').post(Login)
 router.route('/update').patch(updateUserDetails)
 router.route('/users').get(getAllUsers).patch(updateUserAdmin)
+
+
+
 router.route('/users/:id').delete(deleteUser)
 
 

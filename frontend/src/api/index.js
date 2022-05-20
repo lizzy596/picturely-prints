@@ -16,13 +16,13 @@ API.interceptors.request.use((req) => {
 
 
 
-export const getProducts = () => API.get('/products')
+export const getProducts = (pageNumber) => API.get(`/products/${pageNumber}`)
 export const getTopProducts = () => API.get('/products/top')
 export const getProduct = (id) => API.get(`/products/${id}`)
 export const deleteProduct = (id) => API.delete(`/products/${id}`);
 
 
-export const fetchProductsBySearch = (searchQuery) => API.get(`/products/search?searchQuery=${searchQuery}`);
+export const fetchProductsBySearch = (searchQuery, pageNumber) => API.get(`/products/search?searchQuery=${searchQuery}&pageNumber=${pageNumber}`);
 
 
 
@@ -48,7 +48,7 @@ export const updateUserDetails = (formData) => API.patch('/auth/update', formDat
 
 //admin Routes
 
-export const getAllUsers = () => API.get('/auth/users')
+export const getAllUsers = () => API.get(`/auth/users`)
 export const adminEditUser = (formData) => API.patch('/auth/users', formData)
 export const adminDeleteUser = (id) => API.delete(`auth/users/${id}`)
-export const getAllOrders = () => API.get('/orders/admin')
+export const getAllOrders = () => API.get(`/orders/admin`)

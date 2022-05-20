@@ -85,10 +85,10 @@ export const getAllUsers = () => async (dispatch) => {
 
     dispatch({type: START_LOADING})
     const { data } = await api.getAllUsers();
-
-    console.log(data)
+    console.log('hey')
+  
    
-    dispatch({ type: GET_ALL_USERS, data })
+    dispatch({ type: GET_ALL_USERS, payload: data })
     dispatch({type: END_LOADING})
     
   } catch (err) {

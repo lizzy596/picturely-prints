@@ -9,11 +9,10 @@ const authMiddleware = require('../middleware/Auth1')
 
 
 
-
-router.route('/').get(getAllProducts)
+router.route('/top').get(getTopProducts)
 router.route('/search').get(getProductsBySearch)
 router.route('/add').post(upload.single('image'), addProduct)
-router.route('/top').get(getTopProducts)
+router.route('/:pageNumber').get(getAllProducts)
 router.route('/:id').get(getProductById).delete(deleteProduct).put(upload.single('image'), updateProduct)
 router.route('/reviews/:id').get(getReviewsById).post(addProductReview)
 

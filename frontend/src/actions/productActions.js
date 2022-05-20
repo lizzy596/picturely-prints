@@ -6,13 +6,13 @@ import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET
 
 
 
-export const getProducts = () => async (dispatch) => {
+export const getProducts = (pageNumber) => async (dispatch) => {
   try {
 
 
     dispatch({type: START_LOADING})
 
-    const { data } = await api.getProducts()
+    const { data } = await api.getProducts(pageNumber)
     dispatch({ type: GET_PRODUCTS, payload: data });
     dispatch({ type: END_LOADING });
   
@@ -116,14 +116,14 @@ export const addProductReview = (value, id) => async(dispatch) => {
   
 }
 
-export const getProductsBySearch = (searchQuery) => async (dispatch) => {
+export const getProductsBySearch = (searchQuery, pageNumber) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING });
   
 
 
     //const { data: { data } } = await api.fetchPostsBySearch(indicator, searchItem);
-    const { data } = await api.fetchProductsBySearch(searchQuery);
+    const { data } = await api.fetchProductsBySearch(searchQuery, pageNumber);
    
     dispatch({ type: FETCH_BY_SEARCH, payload: data  });
     dispatch({ type: END_LOADING });

@@ -15,7 +15,9 @@ import { addToCart } from '../actions/cartActions'
 const ProductScreen = ({ match }) => {
 
 //const product = products.find((p) => p._id == 1)
+//const { keyword } = useParams()
 
+//console.log(keyword)
 
 
 
@@ -39,7 +41,11 @@ const user = JSON.parse(localStorage.getItem('profile'));
 
 
 
-const { products, isLoading, product, reviews, addedReview, error, success_message, error_message  }  = useSelector((state) => state.productReducer);
+const { products, isLoading, product, reviews, addedReview, error, success_message, error_message, isSearching, keyword  }  = useSelector((state) => state.productReducer);
+
+console.log(isSearching)
+console.log(keyword)
+
 
 
 

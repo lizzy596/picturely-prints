@@ -50,10 +50,11 @@ useEffect(() => {
      <main className="py-3">
        <Container>
       <Routes>
-
       
       <Route path="/" element={<HomeScreen />} />
+      <Route path="/page/:pageNumber" element={<HomeScreen />} />
       <Route path="/:keyword" element={<HomeScreen />} />
+      <Route path="/search/:keyword/page/:pageNumber" element={<HomeScreen />} />
      
       <Route path="/carousel" element={<ProductCarousel />} />
       <Route path="/login" element={<LoginScreen />} />
@@ -67,11 +68,13 @@ useEffect(() => {
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/admin" element={user?.isAdmin === 1 ? <AdminDashboard /> : <Navigate to='/' /> } />
       <Route path="/admin/products" element={user?.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/products/:pageNumber" element={user?.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products/add" element={user?.isAdmin === 1 ? <AddProductScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products/edit" element={user?.isAdmin === 1 ? <EditProductScreen /> : <Navigate to='/' /> } />
-      <Route path="/admin/users/" element={user?.isAdmin === 1 ? <UserListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/users" element={user?.isAdmin === 1 ? <UserListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/users/edit" element={user?.isAdmin === 1 ? <UserEditScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/orders" element={user?.isAdmin === 1 ? <OrderListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/orders/:pageNumber" element={user?.isAdmin === 1 ? <OrderListScreen /> : <Navigate to='/' /> } />
       
      
 

@@ -72,7 +72,7 @@ const userReducer = (state = { authData: null, isLoading: false, success: false,
             return { ...state, authData: action.data };
 
         case GET_ALL_USERS:
-            return { ...state, users: action.data.result };
+            return { ...state, users: action.payload.result  };
         case ADMIN_EDIT_USER:
            
             return { ...state, editingUser:true, userToEdit: state.users.find((user) => user.user_id === action.payload)};

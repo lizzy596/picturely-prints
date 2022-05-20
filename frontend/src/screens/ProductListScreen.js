@@ -1,8 +1,8 @@
 
 import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button, Row, Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
+import { Table, Button, Row, Col, Container } from 'react-bootstrap'
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -10,14 +10,15 @@ import { getProducts, deleteProduct } from '../actions/productActions';
 import { JUST_ADDED_PRODUCT, START_LOADING, END_JUST_ADDED_PRODUCT, ADMIN_DELETE_PRODUCT, ADMIN_END_DELETE_PRODUCT, ADMIN_EDIT_PRODUCT, ADMIN_END_EDIT_PRODUCT, END_JUST_EDITED_PRODUCT  } from '../constants/productConstants'
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillDelete, AiOutlinePlus } from "react-icons/ai"
+import Paginate from '../components/Paginate'
 
 
 const ProductListScreen = ({history, match}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
  
-  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct}  = useSelector((state) => state.productReducer);
-
+  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct, page, pages}  = useSelector((state) => state.productReducer);
+  const { pageNumber } = useParams()
 
   
 
@@ -43,9 +44,17 @@ const editHandler = (id) => {
 
 useEffect(() => {
 
-  dispatch(getProducts())
+  dispatch(getProducts(pageNumber))
 
 }, [])
+
+
+
+useEffect(() => {
+
+  dispatch(getProducts(pageNumber))
+
+}, [pageNumber])
 
 
 
@@ -54,20 +63,20 @@ useEffect(() => {
 useEffect(() => {
 
   if(justAddedProduct) {
-    dispatch(getProducts())
+    dispatch(getProducts(pageNumber))
     dispatch({type: END_JUST_ADDED_PRODUCT})
     return
 } 
 if(justEditedProduct) {
-  dispatch(getProducts())
+  dispatch(getProducts(pageNumber))
   dispatch({type: END_JUST_EDITED_PRODUCT})
   
 } 
 if(isLoading){
-dispatch(getProducts())
+dispatch(getProducts(pageNumber))
 }
 if(deletingProduct) {
-  dispatch(getProducts())
+  dispatch(getProducts(pageNumber))
   dispatch({type: ADMIN_END_DELETE_PRODUCT})
 }
  
@@ -138,7 +147,9 @@ const style1 = { color: "red", fontSize: "1.5em" }
               ))}
             </tbody>
           </Table>
-
+          <Container className="my-3 paginate justify-content-center">
+          <Paginate pages={pages} page={page} isAdmin={true} />  
+          </Container>    
     </>
   )
 }

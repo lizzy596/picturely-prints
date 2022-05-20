@@ -186,7 +186,13 @@ const updateUserDetails = asyncWrapper(async(req, res, next) => {
 
 
 const getAllUsers = asyncWrapper(async(req, res, next) => {
-   let q = 'SELECT * FROM user';
+   
+
+
+
+  
+
+   let q = 'SELECT  user_id, first_name, last_name, email, isAdmin FROM user';
     await db.query(q, (err,result) => {
         if(err) {
            return next(createCustomError('Something went wrong', 500))

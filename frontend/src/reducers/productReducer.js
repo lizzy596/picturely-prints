@@ -5,12 +5,12 @@ import { ADD_PRODUCT, GET_PRODUCTS, GET_PRODUCT, START_LOADING, END_LOADING,
     SET_PRODUCT_ID,
     GET_TOP_PRODUCTS, 
     FETCH_BY_SEARCH,
-    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR, END_SEARCH
+    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR, START_SEARCH, END_SEARCH, SET_KEYWORD, CLEAR_KEYWORD,
 } from '../constants/productConstants';
 
 
 
-const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false, isSearching: false}, action) => {
+const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false, isSearching: false, keyword: '', page: null, pages: null, }, action) => {
     switch (action.type) {
 
     
@@ -21,7 +21,7 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         
         case GET_PRODUCTS:
           
-            return { ...state, products: action.payload.result };
+            return { ...state, products: action.payload.result, page: action.payload.page, pages: action.payload.result[0].full_count / action.payload.pageSize };
 
         case GET_TOP_PRODUCTS:
             return { ...state, topProducts: action.payload.result };
@@ -37,9 +37,15 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         case GET_PRODUCT:
                 return { ...state, product: state.products.find((item) => item.product_id === action.payload.result[0].product_id)};
         case FETCH_BY_SEARCH:
-                return { ...state, products: action.payload.result, isSearching: true};
+                return { ...state, products: action.payload.result, page: action.payload.page, pages: action.payload.result[0].full_count / action.payload.pageSize};
+        case START_SEARCH:
+                return { ...state, isSearching: true};
         case END_SEARCH:
-                return { ...state, isSearching: false}
+                return { ...state, isSearching: false};
+       case SET_KEYWORD:
+                 return { ...state, keyword: action.payload.data};
+        case CLEAR_KEYWORD:
+                 return { ...state, keyword: ''};
 
 
 

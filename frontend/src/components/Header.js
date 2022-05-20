@@ -19,6 +19,19 @@ const Header = () => {
   const style ={ marginLeft: '5px', paddingRight: '3px'}
 
 
+  const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
+
+  const [ show, setShow] = useState(false)
+
+
+
+
+
+
+
+ 
+
+
 
 
 
@@ -44,7 +57,7 @@ const Header = () => {
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
    
-    <SearchBox className="search-bar"/>
+    {show && <SearchBox className="search-bar" />}
 
      
     

@@ -35,7 +35,9 @@ let q =  "INSERT INTO products (name, image, filename, price, brand, category, c
 }) 
 
 
-const getAllProducts = asyncWrapper (async(req,res,next) => {
+/*const getAllProducts = asyncWrapper (async(req,res,next) => {
+
+
 
 const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
 FROM products 
@@ -51,12 +53,55 @@ GROUP BY products.product_id`
      }
    }) 
   
-  }) 
+  }) */
+
+
+  
+const getAllProducts = asyncWrapper (async(req,res,next) => {
+
+const { pageNumber } = req.params
+
+
+
+  const pageSize=2
+  const page = Number(pageNumber) || 1
+  let offsetValue = (page-1) * pageSize;
+  
+  const q = `SELECT count(*) OVER() AS full_count, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+  FROM products 
+  LEFT OUTER JOIN reviews 
+  ON products.product_id=reviews.product_id
+ 
+ 
+  GROUP BY products.product_id
+
+  LIMIT ${pageSize} OFFSET ${offsetValue}`
+    
+     await db.query(q, (err,result) => {
+       if(err) {
+         console.log(err)
+       } else {
+         res.status(201).json({ result, page, pageSize })
+       }
+     }) 
+    
+    }) 
 
 
 
   
-const getTopProducts = asyncWrapper (async(req,res,next) => {
+
+
+
+
+
+
+
+
+
+
+
+  const getTopProducts = asyncWrapper (async(req,res,next) => {
 
   
 
@@ -81,23 +126,29 @@ const getTopProducts = asyncWrapper (async(req,res,next) => {
 
 const getProductsBySearch = asyncWrapper (async(req,res,next) => {
 
-const { searchQuery } = req.query;
+const { searchQuery, pageNumber } = req.query;
 
 let searchTerm = `${searchQuery}%`
 
-const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+
+const pageSize=2
+const page = Number(pageNumber) || 1
+let offsetValue = (page-1) * pageSize;
+
+const q = `SELECT count(*) OVER() AS full_count, products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
 FROM products  
 LEFT OUTER JOIN reviews 
 ON products.product_id=reviews.product_id
 WHERE LOWER(products.name) LIKE '${searchTerm}'
-GROUP BY products.product_id`
+GROUP BY products.product_id
+LIMIT ${pageSize} OFFSET ${offsetValue}`
 
     //const q = `SELECT product_id FROM products WHERE LOWER(products.name) LIKE '${searchTerm}'`
 await db.query(q, (err,result) => {
      if(err) {
        console.log(err)
      } else {
-       res.status(201).json({ result })
+       res.status(201).json({ result, page, pageSize })
      } 
 
    }) 
