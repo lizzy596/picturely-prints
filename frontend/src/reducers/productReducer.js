@@ -37,7 +37,7 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         case GET_PRODUCT:
                 return { ...state, product: state.products.find((item) => item.product_id === action.payload.result[0].product_id)};
         case FETCH_BY_SEARCH:
-                return { ...state, products: action.payload.result, page: action.payload.page, pages: action.payload.result[0].full_count / action.payload.pageSize};
+                return { ...state, products: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize};
         case START_SEARCH:
                 return { ...state, isSearching: true};
         case END_SEARCH:

@@ -17,13 +17,15 @@ const HomeScreen = () => {
     //const { keyword } = useParams()
     const { products, isLoading, isSearching, page, pages }  = useSelector((state) => state.productReducer);
 
+    console.log(pages)
+
   
 
     const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
 
     const { pageNumber } = useParams()
 
-    console.log(pageNumber)
+    
 
    
 
@@ -121,15 +123,20 @@ const viewAllProducts = () => {
 
  
     {!isSearching ? <h3 className="my-3">All Products</h3> : <h3 className="my-3">Search Results For: '{searchTerm}'</h3> }
+
+    {!pages && <h6>No results found.</h6>}
     {isSearching && <Button onClick={viewAllProducts}>Back to all products</Button> }
 
    
-    <Row>
-            {products.map((product) => (
+       <Row>  
+
+        
+
+             {products.map((product) => (
               <Col  key={product.product_id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
               </Col>
-            ))}
+            ))} 
           </Row>
           <Container className="my-3 paginate justify-content-center">
           <Paginate 
