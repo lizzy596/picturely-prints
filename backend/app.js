@@ -40,6 +40,10 @@ app.use('/auth', userRoutes)
 app.use('/products', productRoutes)
 app.use('/orders', orderRoutes)
 
+app.get('/config/paypal', (req, res) =>
+  res.send(process.env.PAYPAL_CLIENT_ID)
+)
+
 
 
 

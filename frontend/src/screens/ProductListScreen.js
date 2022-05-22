@@ -17,7 +17,7 @@ const ProductListScreen = ({history, match}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
  
-  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct, page, pages}  = useSelector((state) => state.productReducer);
+  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct, page, pages, error, error_message}  = useSelector((state) => state.productReducer);
   const { pageNumber } = useParams()
 
   
@@ -32,6 +32,7 @@ const deleteHandler = (id) => {
  
   dispatch(deleteProduct(id))
   dispatch({type: ADMIN_DELETE_PRODUCT})
+  navigate('/admin/products/1')
 }
 
 const editHandler = (id) => {
@@ -55,6 +56,13 @@ useEffect(() => {
   dispatch(getProducts(pageNumber))
 
 }, [pageNumber])
+
+
+useEffect(() => {
+
+  dispatch(getProducts(pageNumber))
+
+}, [page, pages])
 
 
 
@@ -106,6 +114,8 @@ const style1 = { color: "red", fontSize: "1.5em" }
         <Button className='my-3' onClick={createProductHandler}>
             <AiOutlinePlus /> Create Product
           </Button>
+
+          {error && <Message variant='danger'>{error_message}</Message>}
 
           <h1>Products</h1>
           

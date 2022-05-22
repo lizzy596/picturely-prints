@@ -10,6 +10,10 @@ const { cloudinary } = require('../cloudinary')
 
 const addProduct = asyncWrapper (async(req,res,next) => {
 
+  if(req.user.isAdmin === 0) {
+    return next(createCustomError('Unauthorized Route', 401))
+}
+
 
 
 const file = req.file.path
@@ -18,13 +22,18 @@ const file = req.file.path
 const filename = req.file.filename
 const { name, price, brand, category, countInStock, description } = req.body;
 
-console.log(name, price, brand, category, countInStock, description)
+if(!name|| !file || !price|| !brand || !category || !countInStock || !description  ) {
+  //return res.status(404).json({ message: "Provide Username and Password" });
+return next(createCustomError('Complete All Fields', 400))
+}
+
+
 
 let q =  "INSERT INTO products (name, image, filename, price, brand, category, countInStock, description) VALUES (?,?,?,?,?,?,?,?)"
 
  await db.query(q, [name, file, filename, price, brand, category, countInStock, description], (err,result) => {
    if(err) {
-     console.log(err)
+    return next(createCustomError('something went error', 500))
    } else {
      res.status(201).json({ result })
    }
@@ -176,8 +185,12 @@ await db.query(q, (err,result) => {
  
  
  
-  const deleteProduct = asyncWrapper (async(req,res,next) => {
- const { id } = req.params;
+const deleteProduct = asyncWrapper (async(req,res,next) => {
+
+  if(req.user.isAdmin === 0) {
+    return next(createCustomError('Unauthorized Route', 401))
+}
+const { id } = req.params;
 let q =  `DELETE FROM products WHERE product_id = ${id}`
  await db.query(q, (err,result) => {
   if(err) {
@@ -192,6 +205,11 @@ let q =  `DELETE FROM products WHERE product_id = ${id}`
 
 
 const updateProduct = asyncWrapper (async(req,res,next) => {
+
+
+  if(req.user.isAdmin === 0) {
+    return next(createCustomError('Unauthorized Route', 401))
+}
 
   const { id } = req.params;
  const { name, price, brand, category, countInStock, description } = req.body;
@@ -228,7 +246,7 @@ if(err) {
 }) 
 
 
-const getProductById = asyncWrapper(async(req,res,next) => {
+/*const getProductById = asyncWrapper(async(req,res,next) => {
   
   const { id } = req.params;
   const q = `SELECT * FROM products WHERE product_id = ${id}`
@@ -241,7 +259,29 @@ const getProductById = asyncWrapper(async(req,res,next) => {
     }
   }) 
 
-}) 
+}) */
+
+
+const getProductById = asyncWrapper (async(req,res,next) => {
+
+  const { id } = req.params
+  
+  
+    const q = `SELECT count(*) OVER() AS full_count, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+    FROM products 
+    LEFT OUTER JOIN reviews 
+    ON products.product_id=reviews.product_id
+    WHERE products.product_id = ${id}`
+      
+       await db.query(q, (err,result) => {
+         if(err) {
+           console.log(err)
+         } else {
+           res.status(201).json({ result  })
+         }
+       }) 
+      
+      }) 
 
 
 

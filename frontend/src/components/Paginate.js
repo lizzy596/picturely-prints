@@ -3,10 +3,13 @@ import { Pagination } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
+
+  if (pages <= 1) return null;
+
   return (
     pages > 1 && (
       <Pagination>
-        {[...Array(pages).keys()].map((x) => (
+        {[...Array(Math.ceil(pages)).keys()].map((x) => (
           <LinkContainer
             key={x + 1}
             to={

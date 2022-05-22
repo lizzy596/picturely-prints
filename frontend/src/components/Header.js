@@ -5,7 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { LOG_OUT } from '../constants/userConstants'
-import SearchBox from '../components/SearchBox'
+
 
 
 
@@ -21,7 +21,7 @@ const Header = () => {
 
   const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
 
-  const [ show, setShow] = useState(false)
+  
 
 
 
@@ -38,7 +38,7 @@ const Header = () => {
 
   const logOut = () => {
     dispatch({type: LOG_OUT})
-    navigate('/')
+    navigate('/page/1')
   }
 
  
@@ -49,7 +49,7 @@ const Header = () => {
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect className="py-3"  >
   <Container  >
    
-    <LinkContainer  to='/'>
+    <LinkContainer  to='/page/1'>
     <Navbar.Brand className="">Picturely Photos</Navbar.Brand>
     </LinkContainer>
   
@@ -57,7 +57,7 @@ const Header = () => {
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
    
-    {show && <SearchBox className="search-bar" />}
+    
 
      
     

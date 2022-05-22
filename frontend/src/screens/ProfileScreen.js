@@ -97,7 +97,7 @@ const productDetails = () => {
 
   const logOut = () => {
     dispatch({type: LOG_OUT})
-    navigate('/')
+    navigate('/page/1')
   }
 
 

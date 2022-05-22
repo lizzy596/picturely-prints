@@ -4,6 +4,7 @@ import { Row, Col, Button, Container } from 'react-bootstrap'
 import SearchBox from '../components/SearchBox'
 import Product from '../components/Product'
 import Loader from '../components/Loader'
+import Meta from '../components/Meta'
 import { useDispatch, useSelector } from 'react-redux';
 import Paginate from '../components/Paginate'
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,13 +18,13 @@ const HomeScreen = () => {
     //const { keyword } = useParams()
     const { products, isLoading, isSearching, page, pages }  = useSelector((state) => state.productReducer);
 
-    console.log(pages)
-
   
 
     const searchTerm = JSON.parse(localStorage.getItem("searchTerm"));
 
-    const { pageNumber } = useParams()
+    const { pageNumber  } = useParams()
+
+  
 
     
 
@@ -36,7 +37,6 @@ const HomeScreen = () => {
     if(searchTerm) {
 
       dispatch({type: START_LOADING})
-     
       dispatch({type: START_SEARCH })
       dispatch(getProductsBySearch(searchTerm, pageNumber))
       return
@@ -44,9 +44,15 @@ const HomeScreen = () => {
     }
 
   }, [pageNumber])
+
+
+
+
+
  
-
-
+useEffect(() => {
+  dispatch(getProducts(pageNumber))
+}, [pageNumber])
 
 
 
@@ -72,12 +78,12 @@ const viewAllProducts = () => {
   dispatch({type:END_SEARCH})
   dispatch({type: END_LOADING})
 
-  navigate('/')
+  navigate('/page/1')
 
 }
 
 
-//console.log(keyword)
+
 
 
 
@@ -110,6 +116,8 @@ const viewAllProducts = () => {
   return (
     <>
 
+<Meta />
+
 <Row >
   <Container className="search-container justify-content-center">
 <SearchBox className="justify-content-center" />
@@ -138,6 +146,7 @@ const viewAllProducts = () => {
               </Col>
             ))} 
           </Row>
+
           <Container className="my-3 paginate justify-content-center">
           <Paginate 
             pages={pages}
@@ -145,6 +154,8 @@ const viewAllProducts = () => {
             keyword={searchTerm ? searchTerm : ''}
           />
           </Container>
+            
+        
         
     
     

@@ -5,6 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Meta from '../components/Meta'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { getProductById, getProducts, getReviewsById, addProductReview} from '../actions/productActions';
@@ -14,7 +15,7 @@ import { addToCart } from '../actions/cartActions'
 
 const ProductScreen = ({ match }) => {
 
-//const product = products.find((p) => p._id == 1)
+
 //const { keyword } = useParams()
 
 //console.log(keyword)
@@ -40,11 +41,12 @@ const user = JSON.parse(localStorage.getItem('profile'));
 
 
 
+const { products, product, isLoading, reviews, addedReview, error, success_message, error_message, isSearching, keyword, page, pages  }  = useSelector((state) => state.productReducer);
 
-const { products, isLoading, product, reviews, addedReview, error, success_message, error_message, isSearching, keyword  }  = useSelector((state) => state.productReducer);
 
-console.log(isSearching)
-console.log(keyword)
+
+
+
 
 
 
@@ -56,16 +58,18 @@ dispatch({type: START_LOADING })
 
 if(id) {
 
-dispatch(getProducts())
+dispatch(getProducts(page))
 //dispatch({type: SET_PRODUCT_ID, payload: id})
 dispatch(getProductById(id))
 dispatch(getReviewsById(id))
 dispatch({ type: END_LOADING });
-return
+
 
 }
 
 }, [])  
+
+
 
 
 
@@ -157,10 +161,10 @@ if (isLoading) {
 
   return (
       <>
-      <Link className="btn btn-dark my-3" to="/">Go Back</Link>
+      <Link className="btn btn-dark my-3" to={`/page/${page}`}>Go Back</Link>
 
      
-
+      <Meta title={product.name} />
       <Row>
         <Col md={6}>
             <Image src={product.image} alt={product.name} fluid />

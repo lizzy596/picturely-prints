@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
+import Message from '../components/Message'
 import { addProduct } from '../actions/productActions';
 import { useNavigate } from 'react-router-dom';
-import { JUST_ADDED_PRODUCT, START_LOADING, END_LOADING} from '../constants/productConstants'
+import { JUST_ADDED_PRODUCT, START_LOADING, END_LOADING, SET_ERROR, END_ERROR} from '../constants/productConstants'
 import Loader from '../components/Loader'
 
 
@@ -19,7 +20,8 @@ const AddProductScreen = () => {
   const { products, isLoading, justAddedProduct }  = useSelector((state) => state.productReducer);
   
 
-
+    const [error, setError] = useState(false)
+    const [ errorMessage, setErrorMessage] = useState('')
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [image, setImage] = useState()
@@ -82,6 +84,15 @@ navigate('/admin')
 
 const submitHandler = async event => {
   event.preventDefault()
+  setError(false)
+  setErrorMessage('')
+
+  if(!name|| !image || !price|| !brand || !category || !countInStock || !description  ) {
+    setError(true)
+    setErrorMessage('All fields must be completed!')
+ 
+  return
+  }
 
   try {
 
@@ -96,24 +107,36 @@ const submitHandler = async event => {
     formData.append("description", description)
   
   
-  const response = await fetch('http://localhost:3001/products/add',{method: 'POST',body: formData})
+  const response = await fetch('http://localhost:3001/products/add',{method: 'POST', headers: new Headers({
+    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    
+}), body: formData})
 
   const data = await response.json()
-  dispatch({type: JUST_ADDED_PRODUCT })
-  dispatch({type: START_LOADING})
+
+ dispatch({type: JUST_ADDED_PRODUCT })
+ dispatch({type: START_LOADING})
 
   clear()
 
-  navigate('/admin/products')
-} catch (error) {
+  navigate('/admin/products/1')
+} catch (err) {
 
-  console.log(error)
-    
-  }
+  
+ console.log(err)
+
+}
 
 /*navigate('/admin')*/
  
-}
+} 
+
+
+
+
+
+
+
 
 
 
@@ -151,6 +174,7 @@ if (isLoading) {
     </Link>
     <FormContainer>
       <h4>Add New Product</h4>
+      {error && <Message variant='danger'>{errorMessage}</Message>}
    
         <Form onSubmit={submitHandler}>
 

@@ -1,26 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { ImCross } from "react-icons/im"
 import { allOrders } from '../actions/orderActions'
+import Paginate1 from '../components/Paginate1'
 
 const OrderListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const { pageNumber } = useParams()
 
 
-  const {isLoading, error, success, success_message, error_message, orders} = useSelector((state) => state.orderReducer)
+
+
+
+  const {isLoading, errorOrders, success, success_message, error_message, orders, page, pages} = useSelector((state) => state.orderReducer)
 
   useEffect(() => {
 
     dispatch(allOrders())
 
   }, [])
+
+
+  useEffect(() => {
+
+    dispatch(allOrders(pageNumber))
+  
+  }, [pageNumber])
+
+
+ 
+
+
+
+
 
   /*const orderList = useSelector((state) => state.orderList)
   const { loading, error, orders } = orderList
@@ -55,9 +74,9 @@ const OrderListScreen = () => {
       <h1>Orders</h1>
       
       {success && <Message variant='danger'>{success_message}</Message>}
-        {error && <Message variant='danger'>{error_message}</Message>}
+        {errorOrders && <Message variant='danger'>{error_message}</Message>}
       
-        <Table striped bordered hover responsive className='table-sm'>
+        {!errorOrders && <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
               <th>ORDER ID</th>
@@ -101,7 +120,10 @@ const OrderListScreen = () => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </Table>}
+        <Container className="my-3 paginate justify-content-center">
+          <Paginate1 pages={pages} page={page} />  
+          </Container>    
       
     </>
   )

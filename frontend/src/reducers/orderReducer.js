@@ -1,9 +1,9 @@
-import { SET_ERROR, END_ERROR, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS } from '../constants/orderConstants'
+import { SET_ERROR, END_ERROR, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS, PAY_ORDER } from '../constants/orderConstants'
 
 
 
 
-const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, errorOrders: false, error: false, success: false, error_message: '', success_message: '' }, action) => {
+const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, errorOrders: false, error: false, success: false, error_message: '', success_message: '', page: null, pages: null, payDetails: {}}, action) => {
     switch (action.type) {
 
 
@@ -16,7 +16,9 @@ const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, erro
             return { ...state, orders: action.payload.result };
 
         case GET_ALL_ORDERS:
-            return { ...state, orders: action.payload.result };
+            return { ...state, orders: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize };
+        case PAY_ORDER:
+            return { ...state, payDetails: { }};
 
         case START_LOADING:
            
@@ -25,9 +27,9 @@ const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, erro
            return { ...state, loadingOrders: false };
 
         case SET_ERROR:
-            return { ...state, errorOrders: true };
+            return { ...state, errorOrders: true, error_message: action.payload.data.msg  };
         case END_ERROR:
-            return { ...state, errorOrders: false };
+            return { ...state, errorOrders: false, error_message: '' };
 
        
     

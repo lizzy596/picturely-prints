@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-//import { PayPalButton } from 'react-paypal-button-v2'
+import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   getOrderById,
+  payUserOrder
   
 } from '../actions/orderActions'
 import {
@@ -18,56 +19,79 @@ import {
   END_LOADING
 } from '../constants/orderConstants'
 
+
+
+
 const OrderScreen = () => {
-
-
- 
 
   const dispatch = useDispatch()
   const { id } = useParams()
-
-  //const address = JSON.parse(localStorage.getItem('shippingAddress'))
-
-
   const user = JSON.parse(localStorage.getItem('profile'))
   const { loadingOrders, order }  = useSelector((state) => state.orderReducer);
-
-
- 
-
-
-
-
-  //const [isDelivered, setIsDelivered] = useState(0)
+//const [isDelivered, setIsDelivered] = useState(0)
   //const [isPaid, setIsPaid] = useState(0)
+  const [sdkReady, setSdkReady] = useState(false)
   const [orderItems, setOrderItems] = useState([])
   const [loadingDeliver, setLoadingDeliver] = useState(false)
  //const [items, setItems] = useState([])
 
 
+ console.log(loadingOrders)
+ console.log(id)
 
-
-  const deliverHandler =  () => {
+const deliverHandler =  () => {
 
   }
 
+useEffect(() => {
+  dispatch({type: START_LOADING})
+if(id) {
+ 
+    dispatch(getOrderById(id))
+    dispatch({type: END_LOADING})
+}
+}, [])
 
-  
+
+const successPaymentHandler = (id,paymentResult) =>{
+   dispatch(payUserOrder(id, paymentResult))
+}
+
+
+const handlePay = (id) => {
+  dispatch(payUserOrder(id))
+} 
+
+
+
+
 
 useEffect(() => {
 
-  if(id) {
 
-    dispatch({type: START_LOADING})
-    dispatch(getOrderById(id))
-    dispatch({type: END_LOADING})
+  const addPayPalScript = async () => {
+    const API = axios.create({ baseURL: 'http://localhost:3001' });
+    const { data: clientId } = await API.get('/config/paypal')
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+    script.async = true
+    script.onload = () => {
+      setSdkReady(true)
+    }
+    document.body.appendChild(script)
+  }
 
 
+  if(order.isPaid === 0) {
+    addPayPalScript()
   }
 
 
 
-}, [])
+
+
+}, [dispatch, loadingOrders])  
 
  
 
@@ -108,7 +132,7 @@ useEffect(() => {
   }
 
 
-  console.log(order[0])
+
 
 
 
@@ -227,7 +251,12 @@ useEffect(() => {
               </ListGroup.Item>
               {!order[0]?.isPaid && user.isAdmin === 0 && (
                 <ListGroup.Item>
-                 <Button>PayPal Button</Button>
+                  <PayPalButton
+                      amount={order[0]?.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+
+                    <Button onClick={() => handlePay(id)}>Paynow</Button>
                 </ListGroup.Item>
               )}
               {loadingDeliver && <Loader />}

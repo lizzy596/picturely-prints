@@ -21,7 +21,7 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         
         case GET_PRODUCTS:
           
-            return { ...state, products: action.payload.result, page: action.payload.page, pages: action.payload.result[0].full_count / action.payload.pageSize };
+            return { ...state, products: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize };
 
         case GET_TOP_PRODUCTS:
             return { ...state, topProducts: action.payload.result };
@@ -34,8 +34,10 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
             return { ...state, product: action.payload.result[0] }; */
 
         
+       /* case GET_PRODUCT:
+                return { ...state, product: state.products.find((item) => item.product_id === action.payload.result[0].product_id)}; */
         case GET_PRODUCT:
-                return { ...state, product: state.products.find((item) => item.product_id === action.payload.result[0].product_id)};
+                return { ...state, product: action.payload.result[0]};
         case FETCH_BY_SEARCH:
                 return { ...state, products: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize};
         case START_SEARCH:

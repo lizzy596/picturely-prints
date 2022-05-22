@@ -72,9 +72,10 @@ useEffect(() => {
       <Route path="/admin/products/add" element={user?.isAdmin === 1 ? <AddProductScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products/edit" element={user?.isAdmin === 1 ? <EditProductScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/users" element={user?.isAdmin === 1 ? <UserListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/users/page/:pageNumber" element={user?.isAdmin === 1 ? <UserListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/users/edit" element={user?.isAdmin === 1 ? <UserEditScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/orders" element={user?.isAdmin === 1 ? <OrderListScreen /> : <Navigate to='/' /> } />
-      <Route path="/admin/orders/:pageNumber" element={user?.isAdmin === 1 ? <OrderListScreen /> : <Navigate to='/' /> } />
+      <Route path="/admin/orders/page/:pageNumber" element={user?.isAdmin === 1 ? <OrderListScreen /> : <Navigate to='/' /> } />
       
      
 

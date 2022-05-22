@@ -15,7 +15,7 @@ import { AUTH, SET_ERROR, END_ERROR,
 
 
 
-const userReducer = (state = { authData: null, isLoading: false, success: false, userInfo: null,  success_message: '', error: false, error_message: '', users: [], editingUser: false, userToEdit: {}}, action) => {
+const userReducer = (state = { authData: null, isLoading: false, success: false, userInfo: null,  success_message: '', error: false, error_message: '', users: [], editingUser: false, userToEdit: {}, page:null, pages:null}, action) => {
     switch (action.type) {
 
 
@@ -58,7 +58,7 @@ const userReducer = (state = { authData: null, isLoading: false, success: false,
                 
         case SET_DELETE_SUCCESS:
 
-            console.log('delete')
+          
             
                     return { ...state, success: true, success_message: 'user deleted!' };
                         
@@ -72,7 +72,7 @@ const userReducer = (state = { authData: null, isLoading: false, success: false,
             return { ...state, authData: action.data };
 
         case GET_ALL_USERS:
-            return { ...state, users: action.payload.result  };
+            return { ...state, users: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize  };
         case ADMIN_EDIT_USER:
            
             return { ...state, editingUser:true, userToEdit: state.users.find((user) => user.user_id === action.payload)};

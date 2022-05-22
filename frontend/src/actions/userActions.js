@@ -52,7 +52,7 @@ export const register = (formData, navigate) => async (dispatch) => {
     if(cart) {
       navigate('/shipping')
     } else {
-      navigate('/')
+      navigate('/page/1')
 
     }
 
@@ -79,12 +79,12 @@ dispatch({ type: SET_ERROR, payload: err.response })
 
 
 
-export const getAllUsers = () => async (dispatch) => {
+export const getAllUsers = (pageNumber) => async (dispatch) => {
 
   try {
 
     dispatch({type: START_LOADING})
-    const { data } = await api.getAllUsers();
+    const { data } = await api.getAllUsers(pageNumber);
     console.log('hey')
   
    
@@ -93,7 +93,10 @@ export const getAllUsers = () => async (dispatch) => {
     
   } catch (err) {
 
+    
+
     dispatch({ type: SET_ERROR, payload: err.response })
+    dispatch({type: END_LOADING})
     
   }
 

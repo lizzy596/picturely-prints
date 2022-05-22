@@ -18,6 +18,10 @@ const EditProductScreen = () => {
 
 
   const { isLoading, productToEdit, editingProduct}  = useSelector((state) => state.productReducer);
+
+
+
+
   
 
 
@@ -63,6 +67,35 @@ useEffect(() => {
 }, [])
 
 
+/*const editHandler = async event => {
+  event.preventDefault()
+ try {
+
+  const formData = new FormData();
+    formData.append("image", image)
+    formData.append("name", name)
+    formData.append("price", price)
+    formData.append("brand", brand)
+    formData.append("category", category)
+    formData.append("countInStock", countInStock)
+    formData.append("description", description)
+
+    const response = await fetch(`http://localhost:3001/products/product/${productToEdit.product_id}`,{method: 'PUT', body: formData})
+    dispatch({type: ADMIN_END_EDIT_PRODUCT })
+    clear()
+    navigate('/admin/products')
+
+
+ } catch (error) {
+  console.log(error)
+ }
+
+} */
+
+
+
+
+
 const editHandler = async event => {
   event.preventDefault()
  try {
@@ -76,7 +109,10 @@ const editHandler = async event => {
     formData.append("countInStock", countInStock)
     formData.append("description", description)
 
-    const response = await fetch(`http://localhost:3001/products/${productToEdit.product_id}`,{method: 'PUT', body: formData})
+    const response = await fetch(`http://localhost:3001/products/product/${productToEdit.product_id}`,{method: 'PUT', headers: new Headers({
+      'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+      
+  }), body: formData})
     dispatch({type: ADMIN_END_EDIT_PRODUCT })
     clear()
     navigate('/admin/products')
@@ -87,6 +123,12 @@ const editHandler = async event => {
  }
 
 }
+
+
+
+
+
+
 
 
 const fileSelected = event => {

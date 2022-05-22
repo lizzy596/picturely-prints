@@ -5,15 +5,16 @@ const multer = require('multer')
 const { storage } = require('../cloudinary')
 const upload = multer({ storage })
 const authMiddleware = require('../middleware/Auth1')
+const authAdminMiddleware = require('../middleware/adminAuth')
 
 
 
 
 router.route('/top').get(getTopProducts)
 router.route('/search').get(getProductsBySearch)
-router.route('/add').post(upload.single('image'), addProduct)
+router.route('/add').post(authAdminMiddleware, upload.single('image'), addProduct)
 router.route('/:pageNumber').get(getAllProducts)
-router.route('/:id').get(getProductById).delete(deleteProduct).put(upload.single('image'), updateProduct)
+router.route('/product/:id').get(getProductById).delete(authAdminMiddleware, deleteProduct).put(authAdminMiddleware, upload.single('image'), updateProduct)
 router.route('/reviews/:id').get(getReviewsById).post(addProductReview)
 
 

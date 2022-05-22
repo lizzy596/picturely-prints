@@ -186,18 +186,22 @@ const updateUserDetails = asyncWrapper(async(req, res, next) => {
 
 
 const getAllUsers = asyncWrapper(async(req, res, next) => {
-   
+    const { pageNumber } = req.params
+    const pageSize=5
+    const page = Number(pageNumber) || 1
+    let offsetValue = (page-1) * pageSize;
 
 
+    if(req.user.isAdmin === 0) {
+        return next(createCustomError('Unauthorized Route', 401))
+    }
 
-  
-
-   let q = 'SELECT  user_id, first_name, last_name, email, isAdmin FROM user';
+    let q = `SELECT count(*) OVER() AS full_count,  user_id, first_name, last_name, email, isAdmin FROM user LIMIT ${pageSize} OFFSET ${offsetValue}`;
     await db.query(q, (err,result) => {
         if(err) {
            return next(createCustomError('Something went wrong', 500))
         } else {
-        res.status(201).json({ result })
+        res.status(201).json({ result, page, pageSize })
         } 
         }) 
 
@@ -225,6 +229,13 @@ const getAllUsers = asyncWrapper(async(req, res, next) => {
 
 
 const updateUserAdmin= asyncWrapper(async(req, res, next) => {
+
+    if(req.user.isAdmin === 0) {
+        return next(createCustomError('Unauthorized Route', 401))
+    }
+
+
+
 
     const { userId, firstName, lastName, email, isAdmin  } = req.body;
 

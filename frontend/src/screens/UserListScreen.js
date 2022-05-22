@@ -10,20 +10,21 @@ import { AiFillDelete, AiOutlinePlus } from "react-icons/ai"
 import { FaRegEdit, FaCheck, FaTimes } from "react-icons/fa";
 import { adminUserDelete } from '../actions/userActions'
 import { ADMIN_EDIT_USER, START_LOADING, END_SUCCESS, SET_DELETE_SUCCESS } from '../constants/userConstants'
-import Paginate from '../components/Paginate'
+import Paginate1 from '../components/Paginate1'
 
 
 const UserListScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { pageNumber } = useParams()
 
 
-  const { error, isLoading, error_message, users, success, success_message }  = useSelector((state) => state.userReducer);
+  const { error, isLoading, error_message, users, success, success_message, page, pages }  = useSelector((state) => state.userReducer);
 
 
  
-
-
+console.log(error)
+console.log(error_message)
 
  
 
@@ -38,16 +39,17 @@ const UserListScreen = () => {
 
 
   useEffect(() => {
-    dispatch(getAllUsers())
-  }, [])
+    dispatch(getAllUsers(pageNumber))
+  }, [pageNumber])
 
   useEffect(() => {
 
-    
-      dispatch(getAllUsers())
+  dispatch(getAllUsers(pageNumber))
     
     
   }, [success]) 
+
+
 
   //const [ users, setUsers] = useState([])
 
@@ -58,6 +60,7 @@ const UserListScreen = () => {
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure')) {
       dispatch(adminUserDelete(id))
+      navigate('/admin/users')
       dispatch({ type: SET_DELETE_SUCCESS })
     }
   }
@@ -109,7 +112,7 @@ if (isLoading) {
         {success && <Message variant='success'>{success_message}</Message>}
         {error && <Message variant='danger'>{error_message}</Message>}
      
-        <Table striped bordered hover responsive className='table-sm'>
+        {!error &&  <Table striped bordered hover responsive className='table-sm'>
           <thead>
             <tr>
               <th>ID</th>
@@ -152,7 +155,11 @@ if (isLoading) {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </Table>}
+
+        <Container className="my-3 paginate justify-content-center">
+          <Paginate1 pages={pages} page={page} />  
+          </Container> 
 
    
       

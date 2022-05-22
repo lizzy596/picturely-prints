@@ -55,8 +55,8 @@ export const deleteProduct = (id) => async (dispatch) => {
    
   
     
-  } catch (error) {
-    console.log(error.response.data);
+  } catch (err) {
+    dispatch({ type: SET_ERROR, payload: err.response })
     
   }
 }
@@ -69,8 +69,8 @@ export const updateProduct = () => async (dispatch) => {
     dispatch({ type: END_LOADING });
   
     
-  } catch (error) {
-    console.log(error.response.data);
+  } catch (err) {
+    dispatch({ type: SET_ERROR, payload: err.response })
     
   }
 }
@@ -81,10 +81,13 @@ export const getProductById = (id) => async(dispatch) => {
 
     dispatch({type: START_LOADING})
     const { data } =  await api.getProduct(id)
+
     dispatch({ type: GET_PRODUCT, payload: data });
+
+
     dispatch({ type: END_LOADING });
-} catch (error) {
-  console.log(error.response.data);
+} catch (err) {
+  dispatch({ type: SET_ERROR, payload: err.response })
   }
 }
 

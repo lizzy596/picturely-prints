@@ -4,6 +4,9 @@ export const END_LOADING = 'END_LOADING'
 export const GET_ORDER_BY_ID = 'GET_ORDER_BY_ID'
 export const GET_USER_ORDERS = 'GET_USER_ORDERS'
 export const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
+export const SET_ERROR = 'SET_ERROR';
+export const END_ERROR = 'END_ERROR';
+export const PAY_ORDER = 'PAY_ORDER';
 
 
 
@@ -42,5 +45,3 @@ export const ORDER_DELIVER_SUCCESS = 'ORDER_DELIVER_SUCCESS'
 export const ORDER_DELIVER_FAIL = 'ORDER_DELIVER_FAIL'
 export const ORDER_DELIVER_RESET = 'ORDER_DELIVER_RESET'
 
-export const SET_ERROR = 'SET_ERROR';
-export const END_ERROR = 'END_ERROR';
