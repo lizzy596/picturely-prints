@@ -30,7 +30,7 @@ const getOrderById = asyncWrapper(async(req, res, next) => {
 
    const { id } = req.params
 
-   const q = `SELECT * FROM orders WHERE order_id = ${id}`
+   const q = `SELECT order_id, order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice, isPaid, DATE_FORMAT(paidAt, '%M %d, %Y at %h:%i %p') AS paidAt, isDelivered, DATE_FORMAT(deliveredAt, '%M %d, %Y at %h:%i %p') AS deliveredAt FROM orders WHERE order_id = ${id}`
 
     await db.query(q, (err,result) => {
       if(err) {
@@ -45,7 +45,7 @@ const getOrderById = asyncWrapper(async(req, res, next) => {
 
 const getUserOrders = asyncWrapper(async(req, res, next) => {
   const { id } = req.params
-  const q = `SELECT order_id, totalPrice, isPaid, isDelivered, DATE_FORMAT(created_at, '%M %d, %Y at %h:%i %p') AS created_at FROM orders WHERE customer_id = ${id} ORDER BY created_at DESC`
+  const q = `SELECT order_id, totalPrice, isPaid, DATE_FORMAT(paidAt, '%M %d, %Y at %h:%i %p') AS paidAt, isDelivered, DATE_FORMAT(deliveredAt, '%M %d, %Y at %h:%i %p') AS deliveredAt, DATE_FORMAT(created_at, '%M %d, %Y at %h:%i %p') AS created_at FROM orders WHERE customer_id = ${id} ORDER BY created_at DESC`
   await db.query(q, (err,result) => {
      if(err) {
        console.log(err)
@@ -81,41 +81,55 @@ let offsetValue = (page-1) * pageSize;
 const updateOrderToPaid = asyncWrapper (async(req,res,next) => {
 
 
- const { id } = req.params;
+const { id } = req.params;
 
- console.log(req.body)
-/* let isPaid;
- let paidAt;
- //let paymentResult = {};
-
- isPaid = 1;
- paidAt = paidAt = Date.now()
- /*paymentResult = {
+let paymentResult = {
   id: req.body.id,
   status: req.body.status,
   update_time: req.body.update_time,
   email_address: req.body.payer.email_address,
+} 
 
-  
-}*/
-
-console.log(id)
+let updated = JSON.stringify(paymentResult)
 
 
-  
-let q = `UPDATE orders SET isPaid=1, paidAt=NOW() WHERE order_id = ${id}`;
 
-await db.query(q, (err,result) => {
+//let q = `UPDATE orders SET isPaid=1, paidAt=NOW(), payId=${paymentResult.id}, payStatus=${paymentResult.status} WHERE order_id = ${id}`;
+let q = 'UPDATE orders SET isPaid=1, paidAt=NOW(), paymentResult=? WHERE order_id = ?';
+
+await db.query(q, [updated, id], (err,result) => {
 if(err) {
   console.log(err)
 } else {
-  console.log(result)
+  
   res.status(201).json({ result })
 } 
 })  
 
-
 }) 
+
+
+
+const updateOrderToDelivered = asyncWrapper (async(req,res,next) => {
+
+
+  const { id } = req.params;
+  
+  
+  
+  //let q = `UPDATE orders SET isPaid=1, paidAt=NOW(), payId=${paymentResult.id}, payStatus=${paymentResult.status} WHERE order_id = ${id}`;
+  let q = `UPDATE orders SET isDelivered=1, deliveredAt=NOW() WHERE order_id = ${id}`;
+  
+  await db.query(q, (err,result) => {
+  if(err) {
+    console.log(err)
+  } else {
+    
+    res.status(201).json({ result })
+  } 
+  })  
+  
+  }) 
 
 
 
@@ -135,6 +149,7 @@ module.exports = {
     getOrderById,
     getUserOrders,
     getAllOrders,
-    updateOrderToPaid
+    updateOrderToPaid,
+    updateOrderToDelivered
     
     }

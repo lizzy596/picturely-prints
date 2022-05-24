@@ -1,5 +1,7 @@
 import * as api from '../api/index.js';
-import {CREATE_ORDER, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS, SET_ERROR, END_ERROR, PAY_ORDER } from '../constants/orderConstants';
+import {CREATE_ORDER, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, 
+    GET_ALL_ORDERS, SET_ERROR, END_ERROR,
+     PAY_ORDER, ORDER_PAID, ORDER_DELIVERED } from '../constants/orderConstants';
 
 
 
@@ -55,15 +57,19 @@ export const allOrders = (pageNumber) => async (dispatch) => {
 
 
 
-export const payUserOrder = (id, paymentResult) => async (dispatch) => {
+export const payUserOrder = (orderId, id) => async (dispatch) => {
 
     try {
 
     dispatch({ type: START_LOADING });
-    const { data } = await api.payOrder(id, paymentResult)
+    const { data } = await api.payOrder(orderId, id)
+
+
+    
 
     
     //dispatch({ type: PAY_ORDER, payload: data });
+    dispatch({ type: ORDER_PAID });
     dispatch({ type: END_LOADING });
         
     } catch (err) {
@@ -72,6 +78,26 @@ export const payUserOrder = (id, paymentResult) => async (dispatch) => {
     }
     
 }
+
+
+export const deliverUserOrder = (orderId) => async (dispatch) => {
+
+    try {
+
+    dispatch({ type: START_LOADING });
+    const { data } = await api.deliverOrder(orderId)
+
+    dispatch({ type: ORDER_DELIVERED });
+    dispatch({ type: END_LOADING });
+        
+    } catch (err) {
+        dispatch({ type: SET_ERROR, payload: err.response })
+        dispatch({ type: END_LOADING });
+    }
+    
+}
+
+
 
 
 

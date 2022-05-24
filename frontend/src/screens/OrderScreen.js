@@ -9,7 +9,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
   getOrderById,
-  payUserOrder
+  payUserOrder,
+  deliverUserOrder
   
 } from '../actions/orderActions'
 import {
@@ -27,19 +28,27 @@ const OrderScreen = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
   const user = JSON.parse(localStorage.getItem('profile'))
-  const { loadingOrders, order }  = useSelector((state) => state.orderReducer);
+  const { loadingOrders, order, orderPaid, orderDelivered }  = useSelector((state) => state.orderReducer);
 //const [isDelivered, setIsDelivered] = useState(0)
   //const [isPaid, setIsPaid] = useState(0)
   const [sdkReady, setSdkReady] = useState(false)
   const [orderItems, setOrderItems] = useState([])
   const [loadingDeliver, setLoadingDeliver] = useState(false)
  //const [items, setItems] = useState([])
+ const [orderId, setOrderId] = useState(id)
 
 
- console.log(loadingOrders)
- console.log(id)
+
+
+
+
+ 
+
+
+
 
 const deliverHandler =  () => {
+   dispatch(deliverUserOrder(id))
 
   }
 
@@ -53,14 +62,21 @@ if(id) {
 }, [])
 
 
-const successPaymentHandler = (id,paymentResult) =>{
-   dispatch(payUserOrder(id, paymentResult))
+
+
+
+const successPaymentHandler = (id) =>{
+   
+dispatch(payUserOrder(orderId, id))
 }
 
 
 const handlePay = (id) => {
   dispatch(payUserOrder(id))
 } 
+
+
+
 
 
 
@@ -87,11 +103,25 @@ useEffect(() => {
     addPayPalScript()
   }
 
+  if(orderPaid) {
+    dispatch({ type: ORDER_PAY_RESET })
+    dispatch(getOrderById(id))
+  } 
+
+  if(orderDelivered) {
+    dispatch({ type: ORDER_PAY_RESET })
+    dispatch(getOrderById(id))
+  } 
 
 
 
 
-}, [dispatch, loadingOrders])  
+
+
+
+
+
+}, [dispatch, loadingOrders, orderPaid, orderDelivered])  
 
  
 
@@ -166,7 +196,7 @@ useEffect(() => {
               </p>
               {order[0]?.isDelivered === 1 ? (
                 <Message variant='success'>
-                  Delivered on delivery time
+                  Delivered at: {order[0]?.deliveredAt}
                 </Message>
               ) : (
                 <Message variant='danger'>Not Delivered</Message>
@@ -180,7 +210,7 @@ useEffect(() => {
                 {order[0]?.paymentMethod}
               </p>
               {order[0]?.isPaid === 1 ? (
-                <Message variant='success'>Paid on date order paid</Message>
+                <Message variant='success'>Paid on: {order[0].paidAt}</Message>
               ) : (
                 <Message variant='danger'>Not Paid</Message>
               )}

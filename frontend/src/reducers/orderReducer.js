@@ -1,9 +1,9 @@
-import { SET_ERROR, END_ERROR, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS, PAY_ORDER } from '../constants/orderConstants'
+import { SET_ERROR, END_ERROR, START_LOADING, END_LOADING, GET_ORDER_BY_ID, GET_USER_ORDERS, GET_ALL_ORDERS, PAY_ORDER, ORDER_PAID, ORDER_PAY_RESET, ORDER_DELIVERED} from '../constants/orderConstants'
 
 
 
 
-const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, errorOrders: false, error: false, success: false, error_message: '', success_message: '', page: null, pages: null, payDetails: {}}, action) => {
+const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, errorOrders: false, error: false, success: false, error_message: '', success_message: '', page: null, pages: null, payDetails: {}, orderPaid: false, orderDelivered: false}, action) => {
     switch (action.type) {
 
 
@@ -19,6 +19,12 @@ const orderReducer = (state = { order: {}, orders:[], loadingOrders: false, erro
             return { ...state, orders: action.payload.result, page: action.payload?.page, pages: action.payload?.result[0]?.full_count / action.payload.pageSize };
         case PAY_ORDER:
             return { ...state, payDetails: { }};
+        case ORDER_PAID: 
+        return { ...state, orderPaid: true};
+        case ORDER_DELIVERED: 
+        return { ...state, orderDelivered: true};
+        case ORDER_PAY_RESET: 
+        return { ...state, orderPaid: false, orderDelivered: false};
 
         case START_LOADING:
            

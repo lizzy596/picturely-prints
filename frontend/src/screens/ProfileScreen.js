@@ -74,9 +74,10 @@ useEffect(() => {
 }, [success]);
 
 
-const productDetails = () => {
+const productDetails = (id) => {
 
   dispatch({type: START_LOADING})
+  navigate(`/order/${id}`)
  
 
 }
@@ -213,7 +214,7 @@ const productDetails = () => {
                   <td>${order.totalPrice}.00</td>
                   <td>
                     {order.isPaid === 1 ? (
-                      <p>paid</p>
+                      <p>{order.paidAt}</p>
                     ) : (
                      
                     <ImCross style={{ color: 'red' }}/> 
@@ -221,17 +222,17 @@ const productDetails = () => {
                   </td>
                   <td>
                     {order.isDelivered === 1 ? (
-                      <p>order delivered</p>
+                      <p>{order.deliveredAt}</p>
                     ) : (
                       <ImCross style={{ color: 'red' }}/> 
                     )}
                   </td>
                   <td>
-                  <LinkContainer to={`/order/${order.order_id}`}>
-                      <Button  onClick={productDetails}className='btn-sm' variant='light'>
+                  
+                      <Button  onClick={() => productDetails(`${order.order_id}`)}className='btn-sm' variant='light'>
                         Details
                       </Button>
-                    </LinkContainer>
+                   
                     
                   </td>
                 </tr>

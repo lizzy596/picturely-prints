@@ -7,6 +7,9 @@ export const GET_ALL_ORDERS = 'GET_ALL_ORDERS'
 export const SET_ERROR = 'SET_ERROR';
 export const END_ERROR = 'END_ERROR';
 export const PAY_ORDER = 'PAY_ORDER';
+export const ORDER_PAID = 'ORDER_PAID';
+export const ORDER_DELIVERED='ORDER_DELIVERED'
+export const MARK_DELIVERED='MARK_DELIVERED';
 
 
 

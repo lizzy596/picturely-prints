@@ -32,7 +32,8 @@ export const addProductReview = (value, id) => API.post(`/products/reviews/${id}
 
 
 export const placeOrder = (orderInfo) => API.post(`/orders`, orderInfo)
-export const payOrder = (id, paymentResult) => API.patch(`/orders/${id}/pay`, paymentResult)
+export const payOrder = (orderId, id) => API.patch(`/orders/pay/${orderId}`, id)
+export const deliverOrder = (orderId) => API.patch(`/orders/deliver/${orderId}`)
 export const getOrder = (id) => API.get(`/orders/${id}`)
 export const getUserOrders = (id) => API.get(`/orders/${id}/user`)
 
