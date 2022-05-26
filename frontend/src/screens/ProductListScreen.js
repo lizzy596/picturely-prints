@@ -6,8 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getProducts, deleteProduct } from '../actions/productActions';
-import { JUST_ADDED_PRODUCT, START_LOADING, END_JUST_ADDED_PRODUCT, ADMIN_DELETE_PRODUCT, ADMIN_END_DELETE_PRODUCT, ADMIN_EDIT_PRODUCT, ADMIN_END_EDIT_PRODUCT, END_JUST_EDITED_PRODUCT  } from '../constants/productConstants'
+import { getProducts, deleteProduct, validateAdminTrue } from '../actions/productActions';
+import { JUST_ADDED_PRODUCT, START_LOADING, END_SUCCESS, END_JUST_ADDED_PRODUCT, ADMIN_DELETE_PRODUCT, ADMIN_END_DELETE_PRODUCT, ADMIN_EDIT_PRODUCT, ADMIN_END_EDIT_PRODUCT, END_JUST_EDITED_PRODUCT  } from '../constants/productConstants'
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillDelete, AiOutlinePlus } from "react-icons/ai"
 import Paginate from '../components/Paginate'
@@ -17,7 +17,7 @@ const ProductListScreen = ({history, match}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
  
-  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct, page, pages, error, error_message}  = useSelector((state) => state.productReducer);
+  const { products, isLoading, justAddedProduct, deletingProduct, justEditedProduct, page, pages, error, error_message, adminError, adminErrorMessage, success, success_message}  = useSelector((state) => state.productReducer);
   const { pageNumber } = useParams()
 
   
@@ -43,8 +43,12 @@ const editHandler = (id) => {
 
 }
 
-useEffect(() => {
 
+
+
+
+useEffect(() => {
+  dispatch(validateAdminTrue())
   dispatch(getProducts(pageNumber))
 
 }, [])
@@ -52,17 +56,26 @@ useEffect(() => {
 
 
 useEffect(() => {
-
+  dispatch(validateAdminTrue())
   dispatch(getProducts(pageNumber))
 
 }, [pageNumber])
 
 
 useEffect(() => {
-
+  dispatch(validateAdminTrue())
   dispatch(getProducts(pageNumber))
 
 }, [page, pages])
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+
+    dispatch({type: END_SUCCESS})
+    
+  }, 2000);
+  return () => clearTimeout(timer);
+}, [success]);
 
 
 
@@ -71,19 +84,23 @@ useEffect(() => {
 useEffect(() => {
 
   if(justAddedProduct) {
+    dispatch(validateAdminTrue())
     dispatch(getProducts(pageNumber))
     dispatch({type: END_JUST_ADDED_PRODUCT})
     return
 } 
 if(justEditedProduct) {
+  dispatch(validateAdminTrue())
   dispatch(getProducts(pageNumber))
   dispatch({type: END_JUST_EDITED_PRODUCT})
   
 } 
 if(isLoading){
+  dispatch(validateAdminTrue())
 dispatch(getProducts(pageNumber))
 }
 if(deletingProduct) {
+  dispatch(validateAdminTrue())
   dispatch(getProducts(pageNumber))
   dispatch({type: ADMIN_END_DELETE_PRODUCT})
 }
@@ -110,26 +127,28 @@ const style1 = { color: "red", fontSize: "1.5em" }
     <>
      <Row className='align-items-center'>
         <Col className='my-4'>
+        {adminError && <Message variant='danger'>{adminErrorMessage}</Message>}
+        {error && <Message variant='danger'>{error_message}</Message>}
 
-        <Button className='my-3' onClick={createProductHandler}>
+         {!adminError && <Button className='my-3' onClick={createProductHandler}>
             <AiOutlinePlus /> Create Product
-          </Button>
+          </Button>}
 
-          {error && <Message variant='danger'>{error_message}</Message>}
+          {success && <Message variant='success'>{success_message}</Message>}
 
-          <h1>Products</h1>
+           {!adminError && <h1>Products</h1>}
           
         </Col>
        
       </Row>
-      <Table striped bordered hover responsive className='table-sm'>
+       {!adminError && <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
                 <th>PRICE</th>
                 <th>CATEGORY</th>
-                <th>BRAND</th>
+                <th>ARTIST</th>
                 <th>EDIT</th>
                 <th>DELETE</th>
               </tr>
@@ -141,7 +160,7 @@ const style1 = { color: "red", fontSize: "1.5em" }
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
-                  <td>{product.brand}</td>
+                  <td>{product.artist}</td>
                   <td>
                     
                       <Button variant='light' className='btn-sm'>
@@ -156,12 +175,12 @@ const style1 = { color: "red", fontSize: "1.5em" }
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </Table>}
           <Container className="my-3 paginate justify-content-center">
-          <Paginate pages={pages} page={page} isAdmin={true} />  
+         {!adminError && <Paginate pages={pages} page={page} isAdmin={true} />}
           </Container>    
     </>
   )
-}
+  }
 
 export default ProductListScreen

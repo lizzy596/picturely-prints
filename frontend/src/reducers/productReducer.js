@@ -5,12 +5,12 @@ import { ADD_PRODUCT, GET_PRODUCTS, GET_PRODUCT, START_LOADING, END_LOADING,
     SET_PRODUCT_ID,
     GET_TOP_PRODUCTS, 
     FETCH_BY_SEARCH,
-    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR, START_SEARCH, END_SEARCH, SET_KEYWORD, CLEAR_KEYWORD,
+    GET_REVIEWS, JUST_ADDED_REVIEW, END_JUST_ADDED_REVIEW, SET_ERROR, END_ERROR, END_SUCCESS, START_SEARCH, END_SEARCH, SET_KEYWORD, CLEAR_KEYWORD, SET_ADMIN_ERROR, END_ADMIN_ERROR
 } from '../constants/productConstants';
 
 
 
-const productReducer = (state = { products: [], topProducts: [], error: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false, isSearching: false, keyword: '', page: null, pages: null, }, action) => {
+const productReducer = (state = { products: [], topProducts: [], error: false, success: false, success_message: '', addedReview: false, reviews: [], error_message: '', productID: null, product: {} ,productToEdit: {}, isLoading: false, justAddedProduct: false, editingProduct: false, justEditedProduct: false, deletingProduct: false, isSearching: false, keyword: '', page: null, pages: null, adminError: true, adminErrorMessage: '' }, action) => {
     switch (action.type) {
 
     
@@ -57,18 +57,18 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
         case END_LOADING:
            return { ...state, isLoading: false };
         case JUST_ADDED_PRODUCT:
-            return {...state, justAddedProduct: true};
+            return {...state, justAddedProduct: true, success: true, success_message: 'Product Added!'};
         case END_JUST_ADDED_PRODUCT:
             return {...state, justAddedProduct: false};
         case ADMIN_DELETE_PRODUCT:
-            return { ...state, products: [...state.products], deletingProduct: true};
+            return { ...state, products: [...state.products], deletingProduct: true, success: true, success_message: 'Product Deleted!'};
         case ADMIN_EDIT_PRODUCT:
            
             return { ...state, editingProduct:true, productToEdit: state.products.find((item) => item.product_id === action.payload)};
         case ADMIN_END_DELETE_PRODUCT:
             return { ...state, products: [...state.products], deletingProduct: false};
         case ADMIN_END_EDIT_PRODUCT:
-            return { ...state, products: [...state.products], productToEdit: {}, editingProduct:false, justEditedProduct: true};
+            return { ...state, products: [...state.products], productToEdit: {}, editingProduct:false, justEditedProduct: true, success: true, success_message: 'product updated successfully!'};
         case END_JUST_EDITED_PRODUCT:
                 return { ...state, justEditedProduct: false};
         case JUST_ADDED_REVIEW:
@@ -77,8 +77,15 @@ const productReducer = (state = { products: [], topProducts: [], error: false, s
             return {...state, addedReview: false, success_message:''};
         case SET_ERROR:
             return { ...state, error: true, error_message: action.payload.data.msg };
+        case SET_ADMIN_ERROR:
+            return { ...state, adminError: true, adminErrorMessage: action.payload.data.msg };
         case END_ERROR:
             return { ...state, error: false, error_message: '', };
+        case END_ADMIN_ERROR:
+            return { ...state, adminError: false, adminErrorMessage: '' };
+        case END_SUCCESS:
+            return { ...state, success: false, success_message: '' };
+        
         
        
     

@@ -1,6 +1,26 @@
 import * as api from '../api/index.js';
 
-import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET_ERROR, JUST_ADDED_REVIEW, GET_TOP_PRODUCTS, FETCH_BY_SEARCH } from '../constants/productConstants';
+import { GET_PRODUCTS, START_LOADING, END_LOADING, GET_PRODUCT, GET_REVIEWS, SET_ERROR, JUST_ADDED_REVIEW, GET_TOP_PRODUCTS, FETCH_BY_SEARCH, SET_ADMIN_ERROR, END_ADMIN_ERROR } from '../constants/productConstants';
+
+export const validateAdminTrue = () => async (dispatch) => {
+  try {
+
+
+    dispatch({type: START_LOADING})
+
+    const { data } = await api.validateAdminStatus()
+
+    dispatch({ type: END_ADMIN_ERROR, payload: data });
+
+    dispatch({ type: END_LOADING });
+  
+    
+  } catch (err) {
+    dispatch({ type: SET_ADMIN_ERROR, payload: err.response })
+    dispatch({ type: END_LOADING });
+    
+  }
+}
 
 
 
@@ -35,8 +55,8 @@ export const getTopProducts = () => async (dispatch) => {
     dispatch({ type: END_LOADING });
   
     
-  } catch (error) {
-    console.log(error.response.data);
+  } catch (err) {
+    dispatch({ type: SET_ERROR, payload: err.response })
     
   }
 }

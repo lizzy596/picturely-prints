@@ -11,7 +11,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 const AdminProductList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { products, isLoading, justAddedProduct}  = useSelector((state) => state.productReducer);
+    const { products, isLoading, justAddedProduct }  = useSelector((state) => state.productReducer);
 
    
 

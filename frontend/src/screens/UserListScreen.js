@@ -23,8 +23,7 @@ const UserListScreen = () => {
 
 
  
-console.log(error)
-console.log(error_message)
+
 
  
 

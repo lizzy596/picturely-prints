@@ -14,7 +14,9 @@ const Header = () => {
   const navigate = useNavigate()
 
   const { authData }  = useSelector((state) => state.userReducer);
-  const user = JSON.parse(localStorage.getItem('profile'));
+
+
+  let user = JSON.parse(localStorage.getItem('profile'));
 
   const style ={ marginLeft: '5px', paddingRight: '3px'}
 
@@ -24,7 +26,11 @@ const Header = () => {
   
 
 
+useEffect(() => {
 
+  let user = JSON.parse(localStorage.getItem('profile'));
+
+}, [])
 
 
 
@@ -50,7 +56,7 @@ const Header = () => {
   <Container  >
    
     <LinkContainer  to='/page/1'>
-    <Navbar.Brand className="">Picturely Photos</Navbar.Brand>
+    <Navbar.Brand className="">Picturely Prints</Navbar.Brand>
     </LinkContainer>
   
     

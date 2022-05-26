@@ -45,6 +45,10 @@ const HomeScreen = () => {
 
   }, [pageNumber])
 
+  useEffect(() => {
+    dispatch(getProducts())
+  }, [])
+
 
 
 
@@ -124,16 +128,19 @@ const viewAllProducts = () => {
 </Container>
 </Row>
 
-{!isSearching  && pageNumber == 1 && ( <><h1 className="my-3">Top Rated Products</h1>
+{!isSearching  && pageNumber == 1 && ( <><h1 className="my-3">Top Rated Prints</h1>
+    <ProductCarousel /> </>)}
+
+    {(!isSearching  && !pageNumber) && ( <><h1 className="my-3">Top Rated Prints</h1>
     <ProductCarousel /> </>)}
     
 
 
  
-    {!isSearching ? <h3 className="my-3">All Products</h3> : <h3 className="my-3">Search Results For: '{searchTerm}'</h3> }
+    {!isSearching ? <h3 className="my-3">All Prints</h3> : <h3 className="my-3">Search Results For: '{searchTerm}'</h3> }
 
     {!pages && <h6>No results found.</h6>}
-    {isSearching && <Button onClick={viewAllProducts}>Back to all products</Button> }
+    {isSearching && <Button onClick={viewAllProducts}>Back to all prints</Button> }
 
    
        <Row>  

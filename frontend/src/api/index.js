@@ -28,7 +28,7 @@ export const fetchProductsBySearch = (searchQuery, pageNumber) => API.get(`/prod
 
 export const getReviews = (id) => API.get(`/products/reviews/${id}`)
 export const addProductReview = (value, id) => API.post(`/products/reviews/${id}`, value )
-
+export const validateAdminStatus = () => API.get('/products/add')
 
 
 export const placeOrder = (orderInfo) => API.post(`/orders`, orderInfo)

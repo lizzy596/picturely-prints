@@ -176,6 +176,12 @@ if (isLoading) {
                     <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
+                    <h6>Artist: {product.artist}</h6>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                    <h6>Category: {product.category}</h6>
+                </ListGroup.Item>
+                <ListGroup.Item>
                     <Rating
                 value={product.averageRating}
                     text={`${product.numOfReviews} reviews`}
@@ -190,8 +196,8 @@ if (isLoading) {
 
 
                 <ListGroup.Item>
-                Description: {readMore ? `${product?.description}` : `${product?.description?.substring(0, 400)}...`}
-                <Button size="sm" variant="secondary" onClick={() => setReadMore(!readMore)}>
+                Description: {readMore ? `${product?.description}` : `${product?.description?.substring(0, 200)}...`}
+                <Button size="sm" className="read-more-button" variant="secondary" onClick={() => setReadMore(!readMore)}>
                 {readMore ? 'show less' : '  read more'}
                 </Button>
                 </ListGroup.Item>

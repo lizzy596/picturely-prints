@@ -23,4 +23,7 @@ export const START_SEARCH = 'START_SEARCH';
 export const END_SEARCH = 'END_SEARCH';
 export const SET_KEYWORD = 'SET_KEYWORD';
 export const CLEAR_KEYWORD = 'CLEAR_KEYWORD';
+export const SET_ADMIN_ERROR = 'SET_ADMIN_ERROR';
+export const END_ADMIN_ERROR = 'END_ADMIN_ERROR'
+export const END_SUCCESS = 'END_SUCCESS'
 

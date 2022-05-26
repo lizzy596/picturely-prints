@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
-import { addProduct } from '../actions/productActions';
+import { addProduct, validateAdminTrue } from '../actions/productActions';
 import { useNavigate } from 'react-router-dom';
 import { START_LOADING, END_LOADING, ADMIN_END_EDIT_PRODUCT } from '../constants/productConstants'
 import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 
 
@@ -17,7 +18,7 @@ const EditProductScreen = () => {
  const navigate = useNavigate()
 
 
-  const { isLoading, productToEdit, editingProduct}  = useSelector((state) => state.productReducer);
+  const { isLoading, productToEdit, editingProduct, adminError, adminErrorMessage}  = useSelector((state) => state.productReducer);
 
 
 
@@ -28,7 +29,7 @@ const EditProductScreen = () => {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [image, setImage] = useState()
-    const [brand, setBrand] = useState('')
+    const [artist, setArtist] = useState('')
     const [category, setCategory] = useState('')
     const [countInStock, setCountInStock] = useState(0)
     const [description, setDescription] = useState('')
@@ -40,10 +41,15 @@ const EditProductScreen = () => {
 const dispatch = useDispatch()
 
 
+useEffect(() => {
+dispatch(validateAdminTrue())
+}, [])
+
+
     const clear = () => {
       setName('')
       setPrice(0)
-      setBrand('')
+      setArtist('')
       setCategory('')
       setCountInStock(0)
       setDescription('')
@@ -56,7 +62,7 @@ useEffect(() => {
   if(productToEdit && editingProduct) {
     setName(productToEdit.name)
     setPrice(productToEdit.price)
-    setBrand(productToEdit.brand)
+    setArtist(productToEdit.artist)
     setCategory(productToEdit.category)
     setCountInStock(productToEdit.countInStock)
     setDescription(productToEdit.description)
@@ -104,7 +110,7 @@ const editHandler = async event => {
     formData.append("image", image)
     formData.append("name", name)
     formData.append("price", price)
-    formData.append("brand", brand)
+    formData.append("artist", artist)
     formData.append("category", category)
     formData.append("countInStock", countInStock)
     formData.append("description", description)
@@ -158,9 +164,10 @@ if (isLoading) {
       Go Back
     </Link>
     <FormContainer>
-      <h4>Edit Product</h4>
+    {adminError && <Message variant='danger'>{adminErrorMessage}</Message>}
+     {!adminError && <h4>Edit Product</h4>}
    
-        <Form onSubmit={editHandler}>
+        {!adminError && <Form onSubmit={editHandler}>
 
           <Form.Group controlId='name'>
             <Form.Label  className='my-2'>Name</Form.Label>
@@ -183,13 +190,13 @@ if (isLoading) {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='brand'>
-              <Form.Label  className='my-2'>Brand</Form.Label>
+            <Form.Group controlId='artist'>
+              <Form.Label  className='my-2'>Artist</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+                placeholder='Enter artist'
+                value={artist}
+                onChange={(e) => setArtist(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
@@ -242,7 +249,7 @@ if (isLoading) {
        <Button type='submit' variant='primary' className="my-3" >
             Update Product
           </Button>
-        </Form>
+        </Form>}
       
     </FormContainer>
   </>

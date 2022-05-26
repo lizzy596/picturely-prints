@@ -1,6 +1,8 @@
 const db = require("../DB/database");
 const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom-error')
+const uniqid = require('uniqid'); 
+
 //const { CREATE_ORDER } = require
 
 
@@ -8,12 +10,13 @@ const {createCustomError} = require('../errors/custom-error')
 
 const addOrder = asyncWrapper(async(req, res, next) => {
 
+  const order_id = uniqid() 
   const { userId, cartItems, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice  } = req.body
 
 
-let q =  "INSERT INTO orders (order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice) VALUES (?,?,?,?,?,?,?)"
+let q =  "INSERT INTO orders (order_id, order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice) VALUES (?,?,?,?,?,?,?,?)"
 
- await db.query(q, [cartItems, userId, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice  ], (err,result) => {
+ await db.query(q, [order_id, cartItems, userId, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice  ], (err,result) => {
     if(err) {
       console.log(err)
     } else {
@@ -30,9 +33,9 @@ const getOrderById = asyncWrapper(async(req, res, next) => {
 
    const { id } = req.params
 
-   const q = `SELECT order_id, order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice, isPaid, DATE_FORMAT(paidAt, '%M %d, %Y at %h:%i %p') AS paidAt, isDelivered, DATE_FORMAT(deliveredAt, '%M %d, %Y at %h:%i %p') AS deliveredAt FROM orders WHERE order_id = ${id}`
+   const q = `SELECT order_id, order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice, isPaid, DATE_FORMAT(paidAt, '%M %d, %Y at %h:%i %p') AS paidAt, isDelivered, DATE_FORMAT(deliveredAt, '%M %d, %Y at %h:%i %p') AS deliveredAt FROM orders WHERE order_id = ?`
 
-    await db.query(q, (err,result) => {
+    await db.query(q, [id], (err,result) => {
       if(err) {
         console.log(err)
       } else {

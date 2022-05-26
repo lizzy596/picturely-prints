@@ -6,7 +6,7 @@ import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
-import { addProduct } from '../actions/productActions';
+import { addProduct, validateAdminTrue } from '../actions/productActions';
 import { useNavigate } from 'react-router-dom';
 import { JUST_ADDED_PRODUCT, START_LOADING, END_LOADING, SET_ERROR, END_ERROR} from '../constants/productConstants'
 import Loader from '../components/Loader'
@@ -17,7 +17,7 @@ import Loader from '../components/Loader'
 const AddProductScreen = () => {
 
 
-  const { products, isLoading, justAddedProduct }  = useSelector((state) => state.productReducer);
+  const { products, isLoading, justAddedProduct, adminError, adminErrorMessage }  = useSelector((state) => state.productReducer);
   
 
     const [error, setError] = useState(false)
@@ -25,7 +25,7 @@ const AddProductScreen = () => {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [image, setImage] = useState()
-    const [brand, setBrand] = useState('')
+    const [artist, setArtist] = useState('')
     const [category, setCategory] = useState('')
     const [countInStock, setCountInStock] = useState(0)
     const [description, setDescription] = useState('')
@@ -39,7 +39,7 @@ const dispatch = useDispatch()
     const clear = () => {
       setName('')
       setPrice(0)
-      setBrand('')
+      setArtist('')
       setCategory('')
       setCountInStock(0)
       setDescription('')
@@ -49,34 +49,9 @@ const dispatch = useDispatch()
 
 
 
-
-/*const submitHandler = async event => {
- event.preventDefault()
-  const formData = new FormData();
-  formData.append("image", image)
-  formData.append("name", name)
-
-
-fetch('http://localhost:3001/admin/add',{
- method: 'post',
- 
- body: formData
- }).then(response => {
-    console.log("success")
- }).catch(err => {
-    console.log(err)
-});
-
-clear()
-navigate('/admin')
-
-
-} */
-
-//console.log(productToEdit.product_id)
-
-
-
+useEffect(() => {
+   dispatch(validateAdminTrue())
+}, [])
 
 
 
@@ -87,7 +62,7 @@ const submitHandler = async event => {
   setError(false)
   setErrorMessage('')
 
-  if(!name|| !image || !price|| !brand || !category || !countInStock || !description  ) {
+  if(!name|| !image || !price|| !artist || !category || !countInStock || !description  ) {
     setError(true)
     setErrorMessage('All fields must be completed!')
  
@@ -101,7 +76,7 @@ const submitHandler = async event => {
     formData.append("image", image)
     formData.append("name", name)
     formData.append("price", price)
-    formData.append("brand", brand)
+    formData.append("artist", artist)
     formData.append("category", category)
     formData.append("countInStock", countInStock)
     formData.append("description", description)
@@ -172,7 +147,9 @@ if (isLoading) {
     <Link to='/admin/products' className='btn btn-light my-3'>
       Go Back
     </Link>
-    <FormContainer>
+
+    {adminError && <Message variant='danger'>{adminErrorMessage}</Message>}
+    {!adminError &&<FormContainer>
       <h4>Add New Product</h4>
       {error && <Message variant='danger'>{errorMessage}</Message>}
    
@@ -199,13 +176,13 @@ if (isLoading) {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='brand'>
-              <Form.Label  className='my-2'>Brand</Form.Label>
+            <Form.Group controlId='artist'>
+              <Form.Label  className='my-2'>Artist</Form.Label>
               <Form.Control
                 type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+                placeholder='Enter artist'
+                value={artist}
+                onChange={(e) => setArtist(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
@@ -265,7 +242,7 @@ if (isLoading) {
           </Button>
         </Form>
       
-    </FormContainer>
+    </FormContainer>}
   </>
   )
 }

@@ -286,7 +286,7 @@ useEffect(() => {
                       onSuccess={successPaymentHandler}
                     />
 
-                    <Button onClick={() => handlePay(id)}>Paynow</Button>
+                   
                 </ListGroup.Item>
               )}
               {loadingDeliver && <Loader />}
