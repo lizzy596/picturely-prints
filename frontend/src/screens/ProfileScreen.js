@@ -188,7 +188,7 @@ const productDetails = (id) => {
             </Button>
         
       </Col>
-      <Col md={9}>
+      <Col md={9} xs={12}>
         <h2>My Orders</h2>
         {loadingOrders ? (
           <Loader />

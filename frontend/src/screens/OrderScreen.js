@@ -41,7 +41,7 @@ const OrderScreen = () => {
 
 
 
-
+const style = { backgroundColor: "gray"}
  
 
 
@@ -175,12 +175,12 @@ useEffect(() => {
   return  (
  
     <>
-      <h1>Order ID: {order[0]?.order_id}</h1>
-      <Row>
+      <h2 className="mt-3">Order ID: {order[0]?.order_id}</h2>
+      <Row className="py-3 px-3" style={{backgroundColor:'#D3D3D3'}}>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
-              <h2>Shipping</h2>
+              <h2 className="my-3">Shipping</h2>
               <p>
                 <strong>Name: </strong> {user?.first_name} {user?.last_name}
               </p>
@@ -204,7 +204,7 @@ useEffect(() => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <h2>Payment Method</h2>
+              <h2 className="my-3">Payment Method</h2>
               <p>
                 <strong>Method: </strong>
                 {order[0]?.paymentMethod}
@@ -221,9 +221,9 @@ useEffect(() => {
               {items.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
-                <ListGroup variant='flush'>
+                <ListGroup variant='flush' className="py-3 px-3" style={{backgroundColor:'#63666A'}}>
                   {items.map((item, index) => (
-                    <ListGroup.Item key={index}>
+                    <ListGroup.Item key={index} >
                       <Row>
                         <Col md={1}>
                           <Image
@@ -257,25 +257,25 @@ useEffect(() => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col><strong>Items:</strong></Col>
                   <Col>${items.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col><strong>Shipping:</strong></Col>
                   <Col>${order[0]?.shippingPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
+                  <Col><strong>Tax:</strong></Col>
                   <Col>${order[0]?.taxPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col><strong>Total:</strong></Col>
                   <Col>${order[0]?.totalPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>

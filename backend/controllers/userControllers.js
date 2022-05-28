@@ -52,49 +52,6 @@ let hash = bcrypt.hashSync(password, salt);
 })
 
 
-
-
-
-
-/*const Login = asyncWrapper (async(req,res,next) => {
-
-    const { email, password } = req.body;
-    if(!email || !password ) {
-        //return res.status(404).json({ message: "Provide Username and Password" });
-     return next(createCustomError('Enter email and password!', 400))
-    }
-
-    let q = 'SELECT * FROM user WHERE email = ?'
-    db.query(q, [email], (err, result) => {
-        if(err) {
-            res.send({err:err})
-        } 
-        if(result.length > 0) {
-            bcrypt.compare(password, result[0].password, (error, response) => {
-                if(response) {
-
-                    //const token = createToken(result[0].first_name);
-                   // res.status(200).json({ User : {user_id: result[0].user_id, email: result[0].email, name: result[0].first_name, isAdmin: result[0].isAdmin}, token })
-                   const token = jwt.sign({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin},  process.env.JWT_SECRET, {
-                    expiresIn: '30d',
-                  })
-
-                   res.status(200).json({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin, token });
-                
-                 
-                } else {
-                    return next(createCustomError('Invalid Credentials', 401))
-                }
-            })
-
-
-4           } else {
-            return next(createCustomError('User does not exist', 400))
-        }
-    })
-})  */
-
-
 const Login = asyncWrapper (async(req,res,next) => {
 
     const { email, password } = req.body;
@@ -135,17 +92,8 @@ const Login = asyncWrapper (async(req,res,next) => {
 
 
 
-
-
-
-
-
-
-
 const updateUserDetails = asyncWrapper(async(req, res, next) => {
     const { id, firstName, lastName, password, confirmPassword, email  } = req.body;
-
-    
 
     if(!firstName|| !lastName || !email || !password || !confirmPassword  ) {
         //return res.status(404).json({ message: "Provide Username and Password" });
@@ -208,36 +156,12 @@ const getAllUsers = asyncWrapper(async(req, res, next) => {
 })
 
 
-/*const updateUserAdmin = asyncWrapper(async(req, res, next) => {
-
-    const { id, firstName, lastName, email, isAdmin  } = req.body;
-        if(!firstName|| !lastName || !email || !isAdmin ) {
-       
-     return next(createCustomError('Complete All Fields', 400))
-    }
-    
-    let q = 'UPDATE user SET first_name=?, last_name=?, email=?, isAdmin=? WHERE user_id = ?';
-
-    await db.query(q,  [firstName, lastName, email, isAdmin, id], (err,result) => {
-        if(err) {
-           return next(createCustomError('Something went wrong', 500))
-        } else {
-         res.status(201).json({ result })
-        } 
-        }) 
-}) */
-
-
 const updateUserAdmin= asyncWrapper(async(req, res, next) => {
 
     if(req.user.isAdmin === 0) {
         return next(createCustomError('Unauthorized Route', 401))
     }
-
-
-
-
-    const { userId, firstName, lastName, email, isAdmin  } = req.body;
+const { userId, firstName, lastName, email, isAdmin  } = req.body;
 
     let setAdmin;
      
@@ -276,6 +200,82 @@ const updateUserAdmin= asyncWrapper(async(req, res, next) => {
 
 
 
+ const sampleLogin = asyncWrapper (async(req,res,next) => {
+
+   let email = 'sam@aol.com'
+   let password = 'secret'
+   
+    let q = 'SELECT * FROM user WHERE email = ?'
+    db.query(q, [email], (err, result) => {
+        if(err) {
+            return next(createCustomError('Invalid Credentials', 401))
+        } 
+        if(result.length > 0) {
+            bcrypt.compare(password, result[0].password, (error, response) => {
+                if(response) {
+
+                    //const token = createToken(result[0].first_name);
+                   // res.status(200).json({ User : {user_id: result[0].user_id, email: result[0].email, name: result[0].first_name, isAdmin: result[0].isAdmin}, token })
+                   const token = jwt.sign({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin},  process.env.JWT_SECRET, {
+                    expiresIn: '30d',
+                  })
+
+                   res.status(200).json({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin, token });
+                
+                 
+                } else {
+                    return next(createCustomError('Invalid Credentials', 401))
+                }
+            })
+
+
+          } else {
+            return next(createCustomError('User does not exist', 400))
+        }
+    }) 
+
+}) 
+
+const sampleLoginAdmin = asyncWrapper (async(req,res,next) => {
+
+    let email = 'harper@aol.com'
+    let password = 'secret'
+   
+
+   
+
+    let q = 'SELECT * FROM user WHERE email = ?'
+    db.query(q, [email], (err, result) => {
+        if(err) {
+            return next(createCustomError('Invalid Credentials', 401))
+        } 
+        if(result.length > 0) {
+            bcrypt.compare(password, result[0].password, (error, response) => {
+                if(response) {
+
+                    //const token = createToken(result[0].first_name);
+                   // res.status(200).json({ User : {user_id: result[0].user_id, email: result[0].email, name: result[0].first_name, isAdmin: result[0].isAdmin}, token })
+                   const token = jwt.sign({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin},  process.env.JWT_SECRET, {
+                    expiresIn: '30d',
+                  })
+
+                   res.status(200).json({ email: result[0].email,  user_id: result[0].user_id, first_name: result[0].first_name, last_name: result[0].last_name, isAdmin: result[0].isAdmin, token });
+                
+                 
+                } else {
+                    return next(createCustomError('Invalid Credentials', 401))
+                }
+            })
+
+
+          } else {
+            return next(createCustomError('User does not exist', 400))
+        }
+    }) 
+
+    
+}) 
+
 
 
 
@@ -295,7 +295,9 @@ module.exports = {
     updateUserDetails,
     getAllUsers,
     updateUserAdmin,
-    deleteUser
+    deleteUser,
+    sampleLogin,
+    sampleLoginAdmin
     
     
 }

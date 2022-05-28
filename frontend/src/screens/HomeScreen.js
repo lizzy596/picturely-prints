@@ -123,21 +123,21 @@ const viewAllProducts = () => {
 <Meta />
 
 <Row >
-  <Container className="search-container justify-content-center">
+  <Container className="search-container mt-3 justify-content-center">
 <SearchBox className="justify-content-center" />
 </Container>
 </Row>
 
-{!isSearching  && pageNumber == 1 && ( <><h1 className="my-3">Top Rated Prints</h1>
+{!isSearching  && pageNumber == 1 && ( <><h1 className="my-3 carousel">Top Rated Prints</h1>
     <ProductCarousel /> </>)}
 
-    {(!isSearching  && !pageNumber) && ( <><h1 className="my-3">Top Rated Prints</h1>
+    {(!isSearching  && !pageNumber) && ( <><h1 className="my-3 carousel">Top Rated Prints</h1>
     <ProductCarousel /> </>)}
     
 
 
  
-    {!isSearching ? <h3 className="my-3">All Prints</h3> : <h3 className="my-3">Search Results For: '{searchTerm}'</h3> }
+    {!isSearching ? <h3 className="my-4">View All Prints</h3> : <h3 className="my-3">Search Results For: '{searchTerm}'</h3> }
 
     {!pages && <h6>No results found.</h6>}
     {isSearching && <Button onClick={viewAllProducts}>Back to all prints</Button> }
@@ -158,6 +158,7 @@ const viewAllProducts = () => {
           <Paginate 
             pages={pages}
             page={page}
+            className="my-3"
             keyword={searchTerm ? searchTerm : ''}
           />
           </Container>

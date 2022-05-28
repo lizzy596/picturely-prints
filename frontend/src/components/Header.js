@@ -5,6 +5,8 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { LOG_OUT } from '../constants/userConstants'
+import Logo from '../assets/logo.svg'
+
 
 
 
@@ -16,7 +18,10 @@ const Header = () => {
   const { authData }  = useSelector((state) => state.userReducer);
 
 
+
+
   let user = JSON.parse(localStorage.getItem('profile'));
+
 
   const style ={ marginLeft: '5px', paddingRight: '3px'}
 
@@ -26,11 +31,11 @@ const Header = () => {
   
 
 
-useEffect(() => {
+/*useEffect(() => {
 
   let user = JSON.parse(localStorage.getItem('profile'));
 
-}, [])
+}, []) */
 
 
 
@@ -53,18 +58,22 @@ useEffect(() => {
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect className="py-3"  >
-  <Container  >
+  <Container>
    
     <LinkContainer  to='/page/1'>
-    <Navbar.Brand className="">Picturely Prints</Navbar.Brand>
+  <img src={Logo} />
     </LinkContainer>
+
+    
+
+   
   
     
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
    
     
-
+  
      
     
       <Nav className="ms-auto">

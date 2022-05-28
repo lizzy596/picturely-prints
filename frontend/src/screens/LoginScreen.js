@@ -7,12 +7,13 @@ import Loader from '../components/Loader'
 import { END_ERROR } from '../constants/userConstants'
 import FormContainer from '../components/FormContainer'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../actions/userActions'
+import { login, sampleTrialLogin, sampleTrialLoginAdmin } from '../actions/userActions'
 
 const initialState = { email: '', password: '' };
 
 const LoginScreen = ({ location, history }) => {
   const [form, setForm] = useState(initialState)
+
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -39,6 +40,21 @@ const LoginScreen = ({ location, history }) => {
     dispatch(login(form, navigate))
   }
 
+  const sampleUserLogin = () => {
+
+   
+    dispatch(sampleTrialLogin())
+    navigate('/page/1')
+   
+  }
+
+  const sampleAdminLogin = () => {
+    dispatch(sampleTrialLoginAdmin())
+    navigate('/page/1')
+  }
+
+  
+  
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   return (
@@ -68,11 +84,22 @@ const LoginScreen = ({ location, history }) => {
           ></Form.Control>
         </Form.Group>
 
-
-        <Button type='submit' variant='primary' className="my-4">
+     <div className="login-buttons">
+        <Button type='submit' variant='primary' className="mt-4" >
           Sign In
         </Button>
+        </div>
       </Form>
+
+      <div className="login-buttons">
+      <Button onClick={sampleUserLogin} variant='danger' className="mt-1">
+          Sample Customer Login
+        </Button>
+
+        <Button onClick={sampleAdminLogin} variant='success' className="mt-1">
+          Sample Admin Login
+        </Button>
+      </div>
 
       <Row className='py-3'>
         <Col>

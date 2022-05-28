@@ -66,7 +66,7 @@ const PlaceOrderScreen = ({ history }) => {
     cartItemsLocal.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   
-  let shippingPrice = addDecimals(itemsPrice > 100 ? 0.00 : 100.00)
+  let shippingPrice = addDecimals(itemsPrice > 100 ? 0.00 : 40.00)
 
   let taxPrice = addDecimals(Number((0.15 * itemsPrice).toFixed(2)))
 
@@ -126,8 +126,8 @@ navigate('/profile')
 
   return (
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
-      <Row>
+      <CheckoutSteps step1 step2 step3 step4 counter={4}/>
+      <Row className="py-3 px-3"style={{backgroundColor:'#D3D3D3'}}>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item className="py-3">
@@ -187,25 +187,25 @@ navigate('/profile')
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col><strong>Items:</strong></Col>
                   <Col>${itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col><strong>Shipping:</strong></Col>
                   <Col>${shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
+                  <Col><strong>Tax:</strong></Col>
                   <Col>${taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col><strong>Total:</strong></Col>
                   <Col>${totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
@@ -215,7 +215,7 @@ navigate('/profile')
               <ListGroup.Item>
                 <Button
                   type='button'
-                  className='btn-block'
+                  className='place-order-button'
                   disabled={cartItemsLocal === 0}
                   onClick={placeOrderHandler}
                 >

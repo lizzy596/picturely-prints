@@ -10,6 +10,7 @@ import { AUTH, SET_ERROR, UPDATE_USER_DETAILS, START_LOADING,
 } from '../constants/userConstants';
 import * as api from '../api/index.js';
 
+
 export const login = (formData, navigate) => async (dispatch) => {
 
   const cart = JSON.parse(localStorage.getItem('cartItems'))
@@ -127,6 +128,41 @@ export const adminUserDelete = (id) => async (dispatch) => {
      dispatch({ type: SET_ERROR, payload: err.response })
       }
   }
+
+
+  export const sampleTrialLogin = (navigate) => async (dispatch) => {
+
+    
+    try {
+
+      console.log('goose')
+      
+      const { data } = await api.sampleLogin();
+      console.log(data)
+    dispatch({ type: AUTH, data });
+    navigate('/page/1') 
+    } catch (err) {
+     
+      dispatch({ type: SET_ERROR, payload: err.response }) 
+    }
+  };
+
+
+
+  export const sampleTrialLoginAdmin = (navigate) => async (dispatch) => {
+
+    
+    try {
+
+  const { data } = await api.sampleLoginAdmin();
+    dispatch({ type: AUTH, data });
+    navigate('/') 
+    } catch (err) {
+      console.log(err)
+     dispatch({ type: SET_ERROR, payload: err.response }) 
+    }
+  };
+
 
 
 

@@ -106,9 +106,9 @@ if (isLoading) {
   }
 
   return (
-    <Row>
+    <Row  className="mt-3">
       <Col md={8}>
-        <h1>Shopping Cart</h1>
+        <h1 className="mt-3">Shopping Cart</h1>
         {cartItemsLocal === null ? (
           <Message>
             Your cart is empty <Link to='/'>Go Back</Link>
@@ -117,17 +117,18 @@ if (isLoading) {
           <ListGroup variant='flush'>
             {cartItemsLocal.map((item) => (
               <ListGroup.Item key={item.product}>
-                <Row>
-                  <Col md={2}>
+                <Row className="cart-row">
+                  <Col xs={2} md={2}>
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
-                  <Col md={3}>
+                  <Col xs={2} md={3}>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                   </Col>
-                  <Col md={2}>${item.price}</Col>
-                  <Col md={2}>
+                  <Col xs={3} md={2}>${item.price}</Col>
+                  <Col xs={3} md={2} className="cart-col">
                     <Form.Control
                       as='select'
+                   
                       value={item.qty}
                       onChange={(e) =>
                         dispatch(
@@ -142,10 +143,10 @@ if (isLoading) {
                       ))}
                     </Form.Control>
                   </Col>
-                  <Col md={2}>
+                  <Col xs={2} md={2}>
                    
 
-                    <ImCross style={style1} onClick={() => removeFromCartHandler(item.product)} />
+                    <AiFillDelete style={style1} onClick={() => removeFromCartHandler(item.product)} />
                   </Col>
                 </Row>
               </ListGroup.Item>
@@ -161,15 +162,19 @@ if (isLoading) {
                 Subtotal ({cartItemsLocal.reduce((acc, item) => acc + item.qty, 0)})
                 items
               </h2>
-              $
+              <h5 className="py-2">
+              Total: $
               {cartItemsLocal
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
+                </h5>
             </ListGroup.Item>
-            <ListGroup.Item>
+            <ListGroup.Item className="cart-screen-buttons">
               <Button
                 type='button'
                 className='btn-block'
+                style={{backgroundColor: 'black', border: 'none'}}
+
                 disabled={cartItemsLocal.length === 0}
                 onClick={checkoutHandler}
               >
@@ -179,7 +184,7 @@ if (isLoading) {
               <Button
                 type='button'
                 className='btn-block'
-                variant="info"
+                variant="primary"
                 className="my-3"
                 
                 onClick={continueShoppingHandler}

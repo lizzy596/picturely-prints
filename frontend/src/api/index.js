@@ -45,6 +45,9 @@ export const getUserOrders = (id) => API.get(`/orders/${id}/user`)
 
 
 export const login = (formData) => API.post('/auth/login', formData);
+export const sampleLogin = (navigate) => API.post('/auth/login/sample',navigate);
+export const sampleLoginAdmin = (navigate) => API.post('/auth/login/sample/admin');
+
 export const register = (formData) => API.post('/auth/register', formData);
 export const updateUserDetails = (formData) => API.patch('/auth/update', formData);
 

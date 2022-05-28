@@ -3,7 +3,7 @@ const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom-error')
 const uniqid = require('uniqid'); 
 
-//const { CREATE_ORDER } = require
+
 
 
 
@@ -16,7 +16,7 @@ const addOrder = asyncWrapper(async(req, res, next) => {
 
 let q =  "INSERT INTO orders (order_id, order_items, customer_id, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice) VALUES (?,?,?,?,?,?,?,?)"
 
- await db.query(q, [order_id, cartItems, userId, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice  ], (err,result) => {
+ await db.query(q, [order_id, cartItems, userId, shippingAddress, paymentMethod, taxPrice, shippingPrice, totalPrice], (err,result) => {
     if(err) {
       console.log(err)
     } else {
@@ -121,9 +121,9 @@ const updateOrderToDelivered = asyncWrapper (async(req,res,next) => {
   
   
   //let q = `UPDATE orders SET isPaid=1, paidAt=NOW(), payId=${paymentResult.id}, payStatus=${paymentResult.status} WHERE order_id = ${id}`;
-  let q = `UPDATE orders SET isDelivered=1, deliveredAt=NOW() WHERE order_id = ${id}`;
+  let q = 'UPDATE orders SET isDelivered=1, deliveredAt=NOW() WHERE order_id = ?';
   
-  await db.query(q, (err,result) => {
+  await db.query(q, [id], (err,result) => {
   if(err) {
     console.log(err)
   } else {

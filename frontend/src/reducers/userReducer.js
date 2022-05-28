@@ -21,7 +21,7 @@ const userReducer = (state = { authData: null, isLoading: false, success: false,
 
         case AUTH:
             localStorage.setItem('profile', JSON.stringify({ ...action?.data }));
-            return { ...state, authData: action.data };
+            return { ...state, authData: action?.data };
 
         case LOG_OUT:
             localStorage.clear();

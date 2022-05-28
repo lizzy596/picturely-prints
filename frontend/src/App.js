@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import OrderScreen from './screens/OrderScreen'
 import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
-import AdminProductList from './screens/AdminProductList'
 import PaymentScreen from './screens/PaymentScreen'
 import ProductListScreen from './screens/ProductListScreen'
 import AddProductScreen from './screens/AddProductScreen'
@@ -27,14 +27,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
 
+  const { authData }  = useSelector((state) => state.userReducer);
 
-  let user = JSON.parse(localStorage.getItem('profile'));
 
-  console.log(user)
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+
+  //let user = JSON.parse(localStorage.getItem('profile'));
+
+
 
 useEffect(() => {
- user = JSON.parse(localStorage.getItem('profile'));
-}, [])
+setUser(JSON.parse(localStorage.getItem('profile')));
+}, [authData])
 
   
 
@@ -66,7 +71,7 @@ useEffect(() => {
       <Route path="/placeorder" element={<PlaceOrderScreen />} />
       <Route path="/order/:id" element={<OrderScreen />} />
       <Route path="/product/:id" element={<ProductScreen />} />
-      <Route path="/admin" element={user?.isAdmin === 1 ? <AdminDashboard /> : <Navigate to='/' /> } />
+      <Route path="/admin" element={user?.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products" element={user?.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products/:pageNumber" element={user?.isAdmin === 1 ? <ProductListScreen /> : <Navigate to='/' /> } />
       <Route path="/admin/products/add" element={user?.isAdmin === 1 ? <AddProductScreen /> : <Navigate to='/' /> } />

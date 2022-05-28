@@ -35,25 +35,6 @@ const OrderListScreen = () => {
   }, [pageNumber])
 
 
- 
-
-
-
-
-
-  /*const orderList = useSelector((state) => state.orderList)
-  const { loading, error, orders } = orderList
-
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
-
-  useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listOrders())
-    } else {
-      history.push('/login')
-    }
-  }, [dispatch, history, userInfo]) */
 
 
 

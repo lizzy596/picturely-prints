@@ -44,35 +44,11 @@ let q =  "INSERT INTO products (name, image, filename, price, artist, category, 
 }) 
 
 
-/*const getAllProducts = asyncWrapper (async(req,res,next) => {
 
-
-
-const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.brand, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
-FROM products 
-LEFT OUTER JOIN reviews 
-ON products.product_id=reviews.product_id
-GROUP BY products.product_id`
-  
-   await db.query(q, (err,result) => {
-     if(err) {
-       console.log(err)
-     } else {
-       res.status(201).json({ result })
-     }
-   }) 
-  
-  }) */
-
-
-  
 const getAllProducts = asyncWrapper (async(req,res,next) => {
 
 const { pageNumber } = req.params
-
-
-
-  const pageSize=4
+const pageSize=4
   const page = Number(pageNumber) || 1
   let offsetValue = (page-1) * pageSize;
   
@@ -98,28 +74,14 @@ const { pageNumber } = req.params
 
 
 
-  
+const getTopProducts = asyncWrapper (async(req,res,next) => {
 
-
-
-
-
-
-
-
-
-
-
-  const getTopProducts = asyncWrapper (async(req,res,next) => {
-
-  
-
- const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.artist, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+const q = `SELECT products.product_id, products.product_id, products.name, products.price, products.image, products.artist, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
  FROM products 
  LEFT OUTER JOIN reviews 
  ON products.product_id=reviews.product_id
  GROUP BY products.product_id
- ORDER BY averageRating DESC LIMIT 3`
+ ORDER BY averageRating DESC LIMIT 5`
    
     await db.query(q, (err,result) => {
       if(err) {
@@ -138,8 +100,6 @@ const getProductsBySearch = asyncWrapper (async(req,res,next) => {
 const { searchQuery, pageNumber } = req.query;
 
 let searchTerm = `${searchQuery}%`
-
-
 const pageSize=4
 const page = Number(pageNumber) || 1
 let offsetValue = (page-1) * pageSize;
@@ -164,27 +124,6 @@ await db.query(q, (err,result) => {
 
 }) 
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 const deleteProduct = asyncWrapper (async(req,res,next) => {
 
   if(req.user.isAdmin === 0) {
@@ -205,9 +144,7 @@ let q =  `DELETE FROM products WHERE product_id = ${id}`
 
 
 const updateProduct = asyncWrapper (async(req,res,next) => {
-
-
-  if(req.user.isAdmin === 0) {
+if(req.user.isAdmin === 0) {
     return next(createCustomError('Unauthorized Route', 401))
 }
 
@@ -248,9 +185,7 @@ if(err) {
 const getProductById = asyncWrapper (async(req,res,next) => {
 
   const { id } = req.params
-  
-  
-    const q = `SELECT count(*) OVER() AS full_count, products.product_id, products.name, products.price, products.image, products.artist, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
+  const q = `SELECT count(*) OVER() AS full_count, products.product_id, products.name, products.price, products.image, products.artist, products.category, products.countInStock, products.description, ROUND (IFNULL(avg(reviews.rating), 0),2) AS averageRating, COUNT(reviews.product_id) AS numOfReviews  
     FROM products 
     LEFT OUTER JOIN reviews 
     ON products.product_id=reviews.product_id
@@ -265,9 +200,6 @@ const getProductById = asyncWrapper (async(req,res,next) => {
        }) 
       
       }) 
-
-
-
 
 const getReviewsById = asyncWrapper(async(req, res, next) => {
   const { id } = req.params;
@@ -317,9 +249,7 @@ const validateIsAdmin = asyncWrapper(async(req, res, next) => {
   if(req.user.isAdmin === 0) {
     return next(createCustomError('Unauthorized Route', 401))
 } 
-
-
-  res.status(201).json({ adminTrue })
+res.status(201).json({ adminTrue })
 
 })
 

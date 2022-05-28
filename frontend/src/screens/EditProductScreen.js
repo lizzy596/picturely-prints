@@ -73,30 +73,7 @@ useEffect(() => {
 }, [])
 
 
-/*const editHandler = async event => {
-  event.preventDefault()
- try {
 
-  const formData = new FormData();
-    formData.append("image", image)
-    formData.append("name", name)
-    formData.append("price", price)
-    formData.append("brand", brand)
-    formData.append("category", category)
-    formData.append("countInStock", countInStock)
-    formData.append("description", description)
-
-    const response = await fetch(`http://localhost:3001/products/product/${productToEdit.product_id}`,{method: 'PUT', body: formData})
-    dispatch({type: ADMIN_END_EDIT_PRODUCT })
-    clear()
-    navigate('/admin/products')
-
-
- } catch (error) {
-  console.log(error)
- }
-
-} */
 
 
 
