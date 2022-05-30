@@ -30,7 +30,9 @@ app.use(cors());
 
 
 
-
+app.get('/', (req, res) => {
+  res.send('picturely prints')
+})
 
 
 
@@ -52,9 +54,9 @@ app.use(errorHandlerMiddleware)
 
 
 // if react router, then add this
- app.get('*', (req,res) =>{
+/* app.get('*', (req,res) =>{
 res.sendFile(path.join(__dirname, 'build/index.html'))
- })
+ }) */
 
 
 

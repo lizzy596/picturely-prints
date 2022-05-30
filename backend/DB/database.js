@@ -4,13 +4,27 @@ const mysql = require("mysql");
 
 
 
-const db = mysql.createConnection({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
 
+
+
+
+/*const db = mysql.createConnection({
+  user: DB_USER,
+  host: DB_HOST,
+  password:DB_PASSWORD,
+  database:DB_NAME,
+}); */
+
+
+
+
+
+const db = mysql.createConnection({
+  user: process.env.DB_USER1,
+  host: process.env.DB_HOST1,
+  password: process.env.DB_PASSWORD1,
+  database: process.env.DB_NAME1
+});
 
 db.connect(function(err) {
   if (err) throw err;
@@ -19,6 +33,7 @@ db.connect(function(err) {
 
 
 module.exports = db
+
 
 
 

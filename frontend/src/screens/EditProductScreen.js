@@ -92,7 +92,7 @@ const editHandler = async event => {
     formData.append("countInStock", countInStock)
     formData.append("description", description)
 
-    const response = await fetch(`http://localhost:3001/products/product/${productToEdit.product_id}`,{method: 'PUT', headers: new Headers({
+    const response = await fetch(`https://picturely-prints.herokuapp.com/products/product/${productToEdit.product_id}`,{method: 'PUT', headers: new Headers({
       'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
       
   }), body: formData})

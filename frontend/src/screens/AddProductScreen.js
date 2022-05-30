@@ -82,7 +82,7 @@ const submitHandler = async event => {
     formData.append("description", description)
   
   
-  const response = await fetch('http://localhost:3001/products/add',{method: 'POST', headers: new Headers({
+  const response = await fetch('https://picturely-prints.herokuapp.com/products/add',{method: 'POST', headers: new Headers({
     'Authorization': `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
     
 }), body: formData})

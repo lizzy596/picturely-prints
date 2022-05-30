@@ -21,6 +21,7 @@ import UserListScreen from './screens/UserListScreen'
 import UserEditScreen from './screens/UserEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import ProductCarousel from './components/ProductCarousel'
+import {Helmet} from "react-helmet";
 
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -51,6 +52,10 @@ setUser(JSON.parse(localStorage.getItem('profile')));
   return (
     <>
     <BrowserRouter>
+    <Helmet>
+        <title>Picturely Prints</title>
+        <meta name="description" content="affordable stylish art" />
+    </Helmet>
     <Header />
      <main className="py-3">
        <Container>

@@ -54,7 +54,7 @@ const clear = () => {
         placeholder='Search Products...'
         className='mr-sm-2 ml-sm-5'
       ></Form.Control>
-      <Button type='submit' variant='success' className='p-2 mx-3'>
+      <Button type='submit' style={{backgroundColor: 'black', border: 'none'}} className='p-2 mx-3'>
         Search
       </Button>
     </Form>

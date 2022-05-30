@@ -23,7 +23,7 @@ const CartScreen = ({ match, location, history }) => {
   const dispatch = useDispatch()
 
   const { cartItems } = useSelector((state) => state.cartReducer)
-  const { isLoading } = useSelector((state) => state.productReducer)
+  const { isLoading, page } = useSelector((state) => state.productReducer)
 
   let [cartItemsLocal, setCartItemsLocal] = useState(JSON.parse(localStorage.getItem("cartItems")))
 
@@ -37,7 +37,7 @@ const CartScreen = ({ match, location, history }) => {
 
 useEffect(() => {
 
-    dispatch({type: START_LOADING })
+dispatch({type: START_LOADING })
 setCartItemsLocal(JSON.parse(localStorage.getItem("cartItems")))
 dispatch({type: END_LOADING })
 }, [cartItems])
@@ -90,7 +90,8 @@ dispatch({type: END_LOADING })
   } 
 
   const continueShoppingHandler = () => {
-    navigate('/')
+    //navigate('/')
+    navigate(`/page/${page}`)
   }
 
  

@@ -1,7 +1,7 @@
 const db = require("../DB/database");
 const asyncWrapper = require('../middleware/async')
 const {createCustomError} = require('../errors/custom-error')
-const { createToken, validateToken } = require('../JWT')
+//const { createToken, validateToken } = require('../JWT')
 var bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
 const jwt = require('jsonwebtoken')
